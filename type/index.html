@@ -1,1 +1,1489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>建築タイプ診断 ～あなたは何タイプ？～</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF6B35;
+    --orange-dark: #D9501E;
+    --steel: #37474F;
+    --steel-dark: #22292D;
+    --yellow: #FFC107;
+    --blue: #1565C0;
+    --gray: #6B7280;
+    --light: #F4F6F7;
+    --border: #E0E3E5;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: "M PLUS Rounded 1c", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
+    font-weight: 700;
+    margin: 0; padding: 0;
+    color: #1E2327;
+    overflow-x: hidden;
+  }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255,255,255,0.12) 0, rgba(255,255,255,0) 20%),
+      radial-gradient(circle at 90% 85%, rgba(255,193,7,0.25) 0, rgba(255,193,7,0) 30%),
+      linear-gradient(160deg, var(--steel-dark) 0%, var(--steel) 55%, #3C4A52 100%);
+    padding: 22px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
 
+  .hero { text-align: center; color: #fff; margin-bottom: 18px; }
+  .hero .badge { font-size: 46px; }
+  .hero h1 { font-size: 30px; margin: 10px 0 6px 0; font-weight: 900; text-shadow: 0 3px 8px rgba(0,0,0,0.3); }
+  .hero p { font-size: 15.5px; opacity: 0.9; margin: 0; }
+
+  .card {
+    background: #fff;
+    border-radius: 22px;
+    padding: 28px 26px;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.3);
+    border: 4px solid var(--yellow);
+  }
+
+  /* start screen */
+  .start-screen { text-align: center; }
+  .start-screen h2 { color: var(--steel); font-size: 23px; margin-bottom: 10px; }
+  .start-screen p { color: var(--gray); font-size: 15px; line-height: 1.7; margin-bottom: 18px; }
+  .start-btn {
+    width: 100%;
+    padding: 20px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-dark));
+    color: #fff;
+    font-weight: 900;
+    font-size: 19px;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 8px 18px rgba(255,107,53,0.35);
+  }
+  .start-btn:active { transform: scale(0.98); }
+  .type-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 18px 0;
+  }
+  .type-preview div {
+    background: var(--light);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 4px;
+    font-size: 11.5px;
+    color: var(--steel);
+    font-weight: 800;
+  }
+
+  /* quiz */
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .progress-bar-outer { flex: 1; height: 12px; background: var(--border); border-radius: 6px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--yellow), var(--orange)); width: 0%; transition: width .3s ease; }
+  .q-counter { font-size: 14px; color: var(--steel); font-weight: 900; white-space: nowrap; }
+
+  .question-text { font-size: 21px; font-weight: 900; color: #16202A; margin-bottom: 20px; line-height: 1.6; }
+  .options { display: flex; flex-direction: column; gap: 14px; }
+  .option-btn {
+    text-align: left;
+    padding: 20px 20px;
+    border: 3px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+    font-size: 17.5px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .12s ease;
+    color: #222;
+    line-height: 1.5;
+  }
+  .option-btn:hover { border-color: var(--orange); background: #FFF6F2; }
+  .option-btn:active { transform: scale(0.98); }
+
+  .nav-row { display: flex; gap: 10px; margin-top: 18px; }
+  .nav-btn {
+    flex: 1;
+    padding: 13px 10px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: #fff;
+    color: var(--gray);
+    font-weight: 800;
+    font-size: 13.5px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .nav-btn:hover { border-color: var(--orange); color: var(--orange-dark); }
+  .nav-btn:active { transform: scale(0.97); }
+  .nav-btn:disabled { opacity: 0.4; cursor: default; }
+  .nav-btn:disabled:hover { border-color: var(--border); color: var(--gray); }
+
+  /* result */
+  .result-screen { text-align: center; display: none; }
+  .result-screen.show { display: block; }
+  .result-tag { font-size: 14px; color: var(--gray); font-weight: 800; letter-spacing: 1px; }
+  .result-emoji {
+    font-size: 64px;
+    margin: 8px 0;
+    display: inline-block;
+    animation: result-emoji-pop .7s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes result-emoji-pop {
+    0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+    60% { transform: scale(1.25) rotate(8deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .rarity-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .rarity-stars {
+    font-size: 20px;
+    color: var(--yellow);
+    letter-spacing: 2px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    animation: rarity-glow 1.8s ease-in-out infinite;
+  }
+  @keyframes rarity-glow {
+    0%, 100% { filter: drop-shadow(0 0 0px rgba(255,193,7,0)); }
+    50% { filter: drop-shadow(0 0 6px rgba(255,193,7,0.8)); }
+  }
+  .rarity-rate {
+    font-size: 12.5px;
+    background: var(--steel);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 800;
+  }
+
+  .phrase-box {
+    background: linear-gradient(120deg, #2B343A, #37474F);
+    color: #FFD700;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 15.5px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    animation: phrase-in .5s ease-out .2s both;
+  }
+  @keyframes phrase-in {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .result-name { font-size: 28px; font-weight: 900; color: var(--orange-dark); margin-bottom: 6px; }
+  .result-code {
+    display: inline-block;
+    background: var(--steel);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+  }
+  .result-desc {
+    text-align: left;
+    background: var(--light);
+    border-radius: 14px;
+    padding: 18px 20px;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .result-section-title {
+    text-align: left;
+    font-size: 14px;
+    color: var(--orange-dark);
+    font-weight: 900;
+    margin: 14px 0 8px 0;
+  }
+  .trait-list { text-align: left; margin: 0 0 16px 0; padding: 0; list-style: none; }
+  .trait-list li {
+    padding: 10px 14px;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-left: 5px solid var(--yellow);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 14.5px;
+    color: #333;
+  }
+  .radar-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--light);
+    border-radius: 14px;
+    padding: 14px 10px;
+    margin-bottom: 16px;
+  }
+  #radarCanvas { max-width: 100%; height: auto; }
+
+  .barometer-box {
+    text-align: left;
+    background: var(--light);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .baro-row { margin-bottom: 16px; }
+  .baro-row:last-child { margin-bottom: 0; }
+  .baro-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .baro-label-left { color: var(--orange-dark); }
+  .baro-label-right { color: var(--blue); }
+  .baro-track {
+    position: relative;
+    height: 14px;
+    background: #E3E7E9;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .baro-fill-left {
+    position: absolute;
+    top: 0; left: 0; height: 100%;
+    background: linear-gradient(90deg, var(--orange-dark), var(--orange));
+    border-radius: 7px 0 0 7px;
+    transition: width .6s ease;
+  }
+  .baro-fill-right {
+    position: absolute;
+    top: 0; right: 0; height: 100%;
+    background: linear-gradient(90deg, var(--blue), #4A90D9);
+    border-radius: 0 7px 7px 0;
+    transition: width .6s ease;
+  }
+  .baro-center-dot {
+    position: absolute;
+    top: -3px; left: 50%;
+    width: 2px; height: 20px;
+    background: #fff;
+    transform: translateX(-50%);
+  }
+  .baro-score {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--gray);
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  .fact-list { text-align: left; margin: 0 0 16px 0; padding: 0; list-style: none; }
+  .fact-list li {
+    padding: 10px 14px;
+    background: #FFF8EC;
+    border: 2px solid #FFE2B3;
+    border-left: 5px solid var(--yellow);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #5C4A1E;
+  }
+  .fact-list li::before { content: "💬 "; }
+
+  .growth-box {
+    text-align: left;
+    background: #EEF7F1;
+    border: 2px solid #CFE8D7;
+    border-left: 5px solid var(--green, #2E8B57);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #1F4A33;
+    margin-bottom: 18px;
+    line-height: 1.7;
+  }
+
+  .btn-compat, .btn-save {
+    background: #fff;
+    color: var(--steel);
+    border: 2px solid var(--border);
+  }
+  .btn-compat:active, .btn-save:active { transform: scale(0.97); }
+
+  .compat-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 20000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .compat-modal-overlay.show { display: flex; }
+  .compat-modal {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px 22px;
+    max-width: 420px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    animation: compat-modal-pop .3s ease-out;
+  }
+  @keyframes compat-modal-pop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .compat-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 900;
+    font-size: 17px;
+    color: var(--steel);
+    margin-bottom: 4px;
+  }
+  .compat-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--gray);
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+  }
+  .compat-modal-sub {
+    font-size: 13px;
+    color: var(--orange-dark);
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .compat-legend {
+    font-size: 11.5px;
+    color: var(--gray);
+    margin-bottom: 10px;
+  }
+  .compat-list { list-style: none; margin: 0; padding: 0; }
+  .compat-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    background: var(--light);
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+  .compat-list li.is-self { background: #FFF3EA; border: 2px solid var(--orange); }
+  .compat-list .compat-mark {
+    font-size: 16px;
+    font-weight: 900;
+    width: 28px;
+    text-align: center;
+  }
+  .compat-list .compat-mark.mark-great { color: #E8B000; }
+  .compat-list .compat-mark.mark-good { color: #1565C0; }
+  .compat-list .compat-mark.mark-tricky { color: var(--orange-dark); }
+
+  .compat-box {
+    text-align: left;
+    background: #EAF3FF;
+    border: 2px solid #BFDBFE;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #1E3A5F;
+    margin-bottom: 18px;
+  }
+  .result-actions { display: flex; gap: 12px; }
+  .result-actions button {
+    flex: 1;
+    padding: 18px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 900;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  .btn-retry { background: linear-gradient(90deg, var(--orange), var(--orange-dark)); color: #fff; }
+  .btn-retry:active { transform: scale(0.97); }
+
+  .idle-note { text-align: center; margin-top: 14px; font-size: 12px; color: rgba(255,255,255,0.8); }
+
+  /* ---- Question slide transition ---- */
+  .quiz-stage { position: relative; }
+  .quiz-stage.slide-out-left { animation: slide-out-left .22s ease forwards; }
+  .quiz-stage.slide-in-right { animation: slide-in-right .28s ease forwards; }
+  .quiz-stage.slide-out-right { animation: slide-out-right .22s ease forwards; }
+  .quiz-stage.slide-in-left { animation: slide-in-left .28s ease forwards; }
+  @keyframes slide-out-left {
+    to { transform: translateX(-40px); opacity: 0; }
+  }
+  @keyframes slide-in-right {
+    from { transform: translateX(40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slide-out-right {
+    to { transform: translateX(40px); opacity: 0; }
+  }
+  @keyframes slide-in-left {
+    from { transform: translateX(-40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* ---- Button ripple ---- */
+  .option-btn, .start-btn, .nav-btn, .btn-retry {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,107,53,0.35);
+    transform: scale(0);
+    animation: ripple-expand .55s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes ripple-expand {
+    to { transform: scale(1); opacity: 0; }
+  }
+
+  /* ---- Suspense screen ---- */
+  .suspense-screen {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .suspense-spinner {
+    font-size: 72px;
+    display: inline-block;
+    animation: suspense-spin 1.1s linear infinite;
+  }
+  @keyframes suspense-spin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.15); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+  .suspense-text {
+    margin-top: 18px;
+    font-size: 19px;
+    font-weight: 900;
+    color: var(--steel);
+  }
+  .suspense-dots {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  .suspense-dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--orange);
+    animation: dot-bounce 1.2s ease-in-out infinite;
+  }
+  .suspense-dots span:nth-child(2) { animation-delay: .15s; }
+  .suspense-dots span:nth-child(3) { animation-delay: .3s; }
+  @keyframes dot-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: .5; }
+    40% { transform: translateY(-10px); opacity: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 23px; }
+    .card { padding: 20px 16px; }
+    .question-text { font-size: 18px; }
+    .option-btn { font-size: 15.5px; padding: 16px 16px; }
+    .type-preview { grid-template-columns: repeat(2, 1fr); }
+    .result-name { font-size: 22px; }
+    .rarity-stars { font-size: 17px; }
+    .phrase-box { font-size: 14px; padding: 12px 14px; }
+    .suspense-spinner { font-size: 56px; }
+    .suspense-text { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="badge">🏗️</div>
+    <h1>建築タイプ診断</h1>
+    <p>12の質問であなたの「現場での動き方」がわかる！</p>
+  </div>
+
+  <div class="card">
+
+    <div id="startScreen" class="start-screen">
+      <h2>あなたは何タイプ？</h2>
+      <p>直感でOK！深く考えず、パッと選んでください。<br>全8タイプの中からあなたのタイプを診断します。</p>
+      <div class="type-preview">
+        <div>棟梁タイプ</div>
+        <div>職人魂タイプ</div>
+        <div>現場監督タイプ</div>
+        <div>寡黙な匠タイプ</div>
+        <div>現場参謀タイプ</div>
+        <div>積算スナイパー</div>
+        <div>段取り番長</div>
+        <div>図面の鬼タイプ</div>
+      </div>
+      <button class="start-btn" id="btnStart">診断スタート！</button>
+    </div>
+
+    <div id="quizScreen" style="display:none;">
+      <div class="progress-row">
+        <span class="q-counter" id="qCounter">質問 1 / 12</span>
+        <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+      </div>
+      <div class="quiz-stage" id="quizStage">
+        <div class="question-text" id="questionText"></div>
+        <div class="options" id="optionsArea"></div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn nav-back" id="btnBack">← ひとつ前に戻る</button>
+        <button class="nav-btn nav-home" id="btnQuizHome">🏠 最初からやり直す</button>
+      </div>
+    </div>
+
+    <div id="suspenseScreen" class="suspense-screen" style="display:none;">
+      <div class="suspense-spinner">🏗️</div>
+      <div class="suspense-text" id="suspenseText">診断中...</div>
+      <div class="suspense-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <div id="resultScreen" class="result-screen">
+      <div class="result-tag">あなたの建築タイプは…</div>
+      <div class="result-emoji" id="resultEmoji">🏗️</div>
+      <div class="result-name" id="resultName">棟梁タイプ</div>
+      <div class="result-code" id="resultCode">FST</div>
+
+      <div class="rarity-row">
+        <span class="rarity-stars" id="rarityStars">★★★★☆</span>
+        <span class="rarity-rate" id="rarityRate">出現率 12%</span>
+      </div>
+
+      <div class="phrase-box" id="phraseBox"></div>
+
+      <div class="result-desc" id="resultDesc"></div>
+
+      <div class="result-section-title">あなたの建築タイプ・ステータス</div>
+      <div class="radar-box">
+        <canvas id="radarCanvas" width="340" height="340"></canvas>
+      </div>
+
+      <div class="result-section-title">あなたのバランス診断</div>
+      <div class="barometer-box" id="barometerBox"></div>
+
+      <div class="result-section-title">こんな特徴があります</div>
+      <ul class="trait-list" id="traitList"></ul>
+
+      <div class="result-section-title">〇〇タイプのあるある</div>
+      <ul class="fact-list" id="factList"></ul>
+
+      <div class="result-section-title">さらに伸ばすワンポイント</div>
+      <div class="growth-box" id="growthBox"></div>
+
+      <div class="compat-box" id="compatBox"></div>
+
+      <div class="result-actions">
+        <button class="btn-compat" id="btnShowCompat">📊 全タイプ相性早見表</button>
+        <button class="btn-save" id="btnSaveCard">💾 結果カードを保存</button>
+      </div>
+      <div class="result-actions">
+        <button class="btn-retry" id="btnRetry">🔁 もう一度診断する</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 相性早見表モーダル -->
+  <div class="compat-modal-overlay" id="compatModalOverlay">
+    <div class="compat-modal">
+      <div class="compat-modal-header">
+        <span>全タイプ相性早見表</span>
+        <button class="compat-modal-close" id="btnCloseCompat">×</button>
+      </div>
+      <div class="compat-modal-sub" id="compatModalSub">あなた（棟梁タイプ）との相性</div>
+      <div class="compat-legend">◎最高 ／ ○良好 ／ △要調整</div>
+      <ul class="compat-list" id="compatList"></ul>
+    </div>
+  </div>
+
+  <!-- 結果カード画像生成用（非表示） -->
+  <canvas id="shareCardCanvas" width="640" height="1060" style="display:none;"></canvas>
+  <div class="idle-note">※この診断は遊び心のあるエンタメコンテンツです。<br>性格や能力を断定するものではありません。</div>
+</div>
+
+<script>
+/* ===================== 質問バンク（3軸×4問＝12問） ===================== */
+// 軸: F(現場派)/D(デスク派)、S(即断派)/J(慎重派)、T(チーム派)/L(職人魂派)
+const QUESTIONS = [
+  { axis: "FD", text: "急な天候変化。あなたの最初の反応は？",
+    a: "すぐ現場に飛んで行って自分の目で確認したい", aVal: "F",
+    b: "まず資料や連絡網で状況を整理したい", bVal: "D" },
+  { axis: "FD", text: "休日、ふと目に入るのはどっち？",
+    a: "近所の工事現場の進み具合", aVal: "F",
+    b: "気になる建材や工法のニュース記事", bVal: "D" },
+  { axis: "FD", text: "新しいプロジェクトが始まるとき、まず気になるのは？",
+    a: "現場の雰囲気や動線", aVal: "F",
+    b: "工程表や予算の全体像", bVal: "D" },
+  { axis: "FD", text: "好きな仕事の瞬間は？",
+    a: "体を動かして物事が形になっていく瞬間", aVal: "F",
+    b: "計画がきれいにハマった瞬間", bVal: "D" },
+
+  { axis: "SJ", text: "現場でちょっとしたトラブル発生。あなたは？",
+    a: "その場でパッと判断して動く", aVal: "S",
+    b: "一旦落ち着いて関係者に確認してから動く", bVal: "J" },
+  { axis: "SJ", text: "新しいやり方を提案されたら？",
+    a: "面白そう、とりあえずやってみる", aVal: "S",
+    b: "リスクや前例をしっかり調べてから判断", bVal: "J" },
+  { axis: "SJ", text: "スケジュールが押しているとき？",
+    a: "勢いで一気に巻き返す", aVal: "S",
+    b: "優先順位を整理して着実に戻す", bVal: "J" },
+  { axis: "SJ", text: "決断を下すときに大事にしているのは？",
+    a: "スピード感", aVal: "S",
+    b: "確実性", bVal: "J" },
+
+  { axis: "TL", text: "理想の仕事の進め方は？",
+    a: "みんなでワイワイ声を掛け合いながら", aVal: "T",
+    b: "自分のペースで黙々と集中して", bVal: "L" },
+  { axis: "TL", text: "後輩に仕事を教えるとしたら？",
+    a: "一緒にやりながら会話しつつ教える", aVal: "T",
+    b: "背中で見せて自分で気づかせる", bVal: "L" },
+  { axis: "TL", text: "達成感を一番感じるのは？",
+    a: "チーム全体でやり遂げたとき", aVal: "T",
+    b: "自分の腕前・仕事ぶりが認められたとき", bVal: "L" },
+  { axis: "TL", text: "飲み会やイベントに誘われたら？",
+    a: "率先して参加し、場を盛り上げたい", aVal: "T",
+    b: "気が向いたら参加する程度でいい", bVal: "L" },
+];
+
+/* ===================== 8タイプの結果データ ===================== */
+const RESULTS = {
+  FST: {
+    emoji: "👷", name: "棟梁タイプ",
+    desc: "現場に出ればすぐ動き、仲間を引っ張るタイプ。判断は速く、周りを巻き込みながら前へ進めるリーダー気質です。現場の空気を読むのが得意で、トラブルが起きても「とりあえず自分が動く」という姿勢で周囲を安心させます。",
+    traits: ["現場での瞬発力がある", "チームをぐいぐい引っ張る", "細かい計画より行動優先", "頼られるとさらに力を発揮する"],
+    compat: "相性が良いタイプ：図面の鬼タイプ（計画面を補ってくれる心強い相棒）",
+    rarity: 4, rate: "12%", phrase: "「とりあえず自分が行く、話はあとだ！」",
+    color: "#FF6B35",
+    funFacts: ["気づいたら現場の真ん中に立っている", "朝礼の声が一番通る", "「後で」と言いつつ結局すぐ動いてしまう"],
+    growthTip: "勢いだけでなく、たまには一呼吸おいて周りの意見を聞いてみると、さらに頼れるリーダーになれます。",
+  },
+  FSL: {
+    emoji: "🦾", name: "一匹狼の職人タイプ",
+    desc: "現場主義でスピード感もあるが、基本は自分のペースで黙々と仕事を進めるタイプ。口数は少なくても結果で語る、現場で一番頼れる「手が早い人」です。周りに合わせるより、自分の仕事の質にとことんこだわります。",
+    traits: ["手を動かすのが一番早い", "細かい指示より裁量を好む", "結果で信頼を勝ち取るタイプ", "職人気質で腕にこだわりがある"],
+    compat: "相性が良いタイプ：現場参謀タイプ（調整役として動きやすくしてくれる）",
+    rarity: 3, rate: "15%", phrase: "「説明はいらない、見てればわかる」",
+    color: "#546E7A",
+    funFacts: ["気づけば一人で黙々と作業を進めている", "「聞いてないよ」と言われるが結果はいつも良い", "休憩中もつい仕事のことを考えてしまう"],
+    growthTip: "たまには進捗を一言共有するだけで、周囲の安心感がぐっと増します。伝える一手間が信頼をさらに深めます。",
+  },
+  FJT: {
+    emoji: "🦺", name: "安全第一の現場監督タイプ",
+    desc: "現場が好きだけど、石橋を叩いて渡る慎重派。チームの安全と足並みを一番に考えるタイプです。急かされても焦らず、みんなが安全に、気持ちよく働ける環境づくりに力を発揮します。",
+    traits: ["安全・品質への意識が高い", "チーム全体の歩調を大事にする", "慎重だが現場感覚は鋭い", "困ったときに頼られる存在"],
+    compat: "相性が良いタイプ：積算スナイパータイプ（裏側の数字をしっかり支えてくれる）",
+    rarity: 3, rate: "14%", phrase: "「焦らない、まず全員の安全を確認だ」",
+    color: "#F9A825",
+    funFacts: ["現場を一周してからじゃないと落ち着かない", "「念のため」が口癖になっている", "新人への声かけを欠かさない"],
+    growthTip: "慎重さは最大の武器ですが、ときには思い切った決断も大切な場面があります。信頼する仲間に背中を押してもらうのも一つの手です。",
+  },
+  FJL: {
+    emoji: "🧱", name: "寡黙な匠タイプ",
+    desc: "現場主義で慎重、そして自分の仕事に黙々と向き合うタイプ。派手さはないけれど、仕上がりの丁寧さには定評があります。周囲とのペースは合わせつつ、仕事の質は絶対に妥協しません。",
+    traits: ["仕上がりの丁寧さに定評がある", "慎重に段取りを組む", "必要以上に群れない", "信頼されると長く付き合うタイプ"],
+    compat: "相性が良いタイプ：棟梁タイプ（引っ張ってもらうと力を発揮しやすい）",
+    rarity: 4, rate: "11%", phrase: "「仕上がりがすべてを語る」",
+    color: "#6D4C41",
+    funFacts: ["仕上がりを三度見直してから離れる", "飲み会より一人の作業時間を好む", "褒められても「当然です」という顔をする"],
+    growthTip: "その丁寧さは唯一無二の強みです。たまには自分の工夫を周りに話してみると、評価がさらに広がります。",
+  },
+  DST: {
+    emoji: "📋", name: "現場参謀タイプ",
+    desc: "デスクワークも得意だけど、判断はスピーディでチームとの連携も重視するタイプ。全体を見渡しながら、関係者をつなぐハブのような存在です。現場と事務所、両方の言葉がわかる貴重な人材。",
+    traits: ["全体を見渡す視点がある", "判断が早く調整力もある", "現場と事務所の橋渡し役", "周りを巻き込むのが得意"],
+    compat: "相性が良いタイプ：一匹狼の職人タイプ（現場の実働を安心して任せられる）",
+    rarity: 3, rate: "13%", phrase: "「全体最適、それが私の仕事です」",
+    color: "#1565C0",
+    funFacts: ["気づけば会話の中心で調整役をしている", "予定表が頭の中に入っている", "「それ、私がまとめておきます」が口癖"],
+    growthTip: "調整力は大きな武器ですが、抱え込みすぎには注意を。頼れる人に思い切って一部を任せてみましょう。",
+  },
+  DSL: {
+    emoji: "🎯", name: "積算スナイパータイプ",
+    desc: "デスクで数字や資料と向き合うのが得意で、判断は速いが基本は自分のペースで集中するタイプ。見積もりや積算など、精度が求められる仕事で真価を発揮します。静かに、でも的確に仕事を仕留めるタイプです。",
+    traits: ["数字や資料の扱いが得意", "集中力と精度が高い", "一人で完結させる力がある", "決めるときは早い"],
+    compat: "相性が良いタイプ：安全第一の現場監督タイプ（現場の実情を伝えてくれる）",
+    rarity: 5, rate: "8%", phrase: "「1円のズレも、見逃さない」",
+    color: "#00897B",
+    funFacts: ["電卓を叩くスピードが異常に速い", "小さな数字のズレにすぐ気づく", "集中すると声をかけても気づかない"],
+    growthTip: "精度の高さは誰もが認めるところ。その根拠を一言添えて共有すると、周囲の納得感がさらに高まります。",
+  },
+  DJT: {
+    emoji: "📐", name: "段取り番長タイプ",
+    desc: "デスクで慎重に計画を練りつつ、チームとの連携も大事にするタイプ。工程表や調整ごとを緻密に組み立てて、みんなが動きやすい環境を整えるのが得意です。縁の下の力持ち的存在。",
+    traits: ["段取り・調整が得意", "慎重だがチーム思い", "トラブルを未然に防ぐ力がある", "周囲から頼られる安心感がある"],
+    compat: "相性が良いタイプ：寡黙な匠タイプ（決めた段取りを丁寧にこなしてくれる）",
+    rarity: 3, rate: "14%", phrase: "「段取り八分、仕事二分」",
+    color: "#5E35B1",
+    funFacts: ["工程表を見ているだけで安心する", "「念のため予備日」を必ず入れる", "トラブルが起きる前に対策済み"],
+    growthTip: "完璧な段取りには定評がありますが、予定外の出来事を楽しむ余裕を持つと、さらに柔軟な調整力が身につきます。",
+  },
+  DJL: {
+    emoji: "📏", name: "図面の鬼タイプ",
+    desc: "デスクワーク派で慎重、そして自分の仕事にとことんこだわるタイプ。図面や仕様の細部まで妥協せずチェックする、まさに品質の最終防衛ライン。静かな情熱で仕事の精度を支えます。",
+    traits: ["細部までとことんこだわる", "慎重かつ緻密な仕事ぶり", "一人で集中して取り組む", "品質へのこだわりが強い"],
+    compat: "相性が良いタイプ：棟梁タイプ（現場を引っ張ってもらいつつ精度を支える）",
+    rarity: 5, rate: "9%", phrase: "「1ミリのズレも、美しくない」",
+    color: "#C62828",
+    funFacts: ["図面の縮尺のズレに一瞬で気づく", "赤ペンでのチェックが生きがい", "細部までこだわりすぎて時間を忘れる"],
+    growthTip: "その完璧主義は品質の砦です。時には「ここまでで十分」と区切りをつける判断も、チーム全体のスピードを助けます。",
+  },
+};
+
+/* 8タイプ全体の相性マトリクス（◎=最高 / ○=良好 / △=要調整） */
+const COMPAT_MATRIX = {
+  FST: { FST:"○", FSL:"○", FJT:"○", FJL:"◎", DST:"○", DSL:"△", DJT:"○", DJL:"◎" },
+  FSL: { FST:"○", FSL:"○", FJT:"△", FJL:"○", DST:"◎", DSL:"○", DJT:"△", DJL:"○" },
+  FJT: { FST:"○", FSL:"△", FJT:"○", FJL:"○", DST:"○", DSL:"◎", DJT:"○", DJL:"△" },
+  FJL: { FST:"◎", FSL:"○", FJT:"○", FJL:"○", DST:"△", DSL:"○", DJT:"○", DJL:"○" },
+  DST: { FST:"○", FSL:"◎", FJT:"○", FJL:"△", DST:"○", DSL:"○", DJT:"○", DJL:"○" },
+  DSL: { FST:"△", FSL:"○", FJT:"◎", FJL:"○", DST:"○", DSL:"○", DJT:"○", DJL:"△" },
+  DJT: { FST:"○", FSL:"△", FJT:"○", FJL:"○", DST:"○", DSL:"○", DJT:"○", DJL:"◎" },
+  DJL: { FST:"◎", FSL:"○", FJT:"△", FJL:"○", DST:"○", DSL:"△", DJT:"◎", DJL:"○" },
+};
+
+let state = { index: 0, answers: { F: 0, D: 0, S: 0, J: 0, T: 0, L: 0 }, history: [] };
+
+const startScreen = document.getElementById("startScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+
+function resetState() {
+  state = { index: 0, answers: { F: 0, D: 0, S: 0, J: 0, T: 0, L: 0 }, history: [] };
+}
+
+/* ===================== ボタンのリップルエフェクト ===================== */
+function attachRipple(btn) {
+  btn.addEventListener("click", e => {
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.4;
+    const circle = document.createElement("span");
+    circle.className = "ripple-circle";
+    circle.style.width = circle.style.height = size + "px";
+    const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+    const clientY = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+    const x = (clientX || rect.left + rect.width / 2) - rect.left - size / 2;
+    const y = (clientY || rect.top + rect.height / 2) - rect.top - size / 2;
+    circle.style.left = x + "px";
+    circle.style.top = y + "px";
+    btn.appendChild(circle);
+    setTimeout(() => circle.remove(), 600);
+  });
+}
+
+document.querySelectorAll(".start-btn, .nav-btn, .btn-retry, .btn-compat, .btn-save, .compat-modal-close").forEach(attachRipple);
+
+document.getElementById("btnStart").addEventListener("click", () => {
+  resetState();
+  startScreen.style.display = "none";
+  resultScreen.classList.remove("show");
+  quizScreen.style.display = "block";
+  renderQuestion();
+});
+
+function renderQuestion(direction) {
+  const q = QUESTIONS[state.index];
+  const stage = document.getElementById("quizStage");
+
+  const doRender = () => {
+    document.getElementById("qCounter").textContent = `質問 ${state.index + 1} / ${QUESTIONS.length}`;
+    document.getElementById("progressBar").style.width = `${(state.index / QUESTIONS.length) * 100}%`;
+    document.getElementById("questionText").textContent = q.text;
+
+    const optionsArea = document.getElementById("optionsArea");
+    optionsArea.innerHTML = "";
+
+    const btnA = document.createElement("button");
+    btnA.className = "option-btn";
+    btnA.textContent = q.a;
+    btnA.addEventListener("click", () => selectAnswer(q.aVal));
+    attachRipple(btnA);
+    optionsArea.appendChild(btnA);
+
+    const btnB = document.createElement("button");
+    btnB.className = "option-btn";
+    btnB.textContent = q.b;
+    btnB.addEventListener("click", () => selectAnswer(q.bVal));
+    attachRipple(btnB);
+    optionsArea.appendChild(btnB);
+
+    const btnBack = document.getElementById("btnBack");
+    btnBack.disabled = state.index === 0;
+
+    stage.className = "quiz-stage " + (direction === "back" ? "slide-in-left" : "slide-in-right");
+  };
+
+  if (direction) {
+    stage.className = "quiz-stage " + (direction === "back" ? "slide-out-right" : "slide-out-left");
+    setTimeout(doRender, 200);
+  } else {
+    doRender();
+  }
+
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function selectAnswer(val) {
+  state.history.push(val);
+  state.answers[val] += 1;
+  state.index += 1;
+  if (state.index >= QUESTIONS.length) {
+    showSuspenseThenResult();
+  } else {
+    renderQuestion("forward");
+  }
+}
+
+document.getElementById("btnBack").addEventListener("click", () => {
+  if (state.index === 0) return;
+  state.index -= 1;
+  const lastVal = state.history.pop();
+  if (lastVal) state.answers[lastVal] -= 1;
+  renderQuestion("back");
+});
+
+document.getElementById("btnQuizHome").addEventListener("click", () => {
+  resetState();
+  quizScreen.style.display = "none";
+  resultScreen.classList.remove("show");
+  startScreen.style.display = "block";
+  window.scrollTo({ top: 0, behavior: "auto" });
+});
+
+/* ===================== 診断中サスペンス演出 ===================== */
+function showSuspenseThenResult() {
+  quizScreen.style.display = "none";
+  const suspense = document.getElementById("suspenseScreen");
+  suspense.style.display = "block";
+
+  const messages = [
+    "診断中...",
+    "現場での動きを分析中...",
+    "判断スピードを計測中...",
+    "あなたのタイプを特定中...",
+  ];
+  let i = 0;
+  const textEl = document.getElementById("suspenseText");
+  const msgTimer = setInterval(() => {
+    i = (i + 1) % messages.length;
+    textEl.textContent = messages[i];
+  }, 450);
+
+  window.scrollTo({ top: 0, behavior: "auto" });
+
+  setTimeout(() => {
+    clearInterval(msgTimer);
+    suspense.style.display = "none";
+    showResult();
+  }, 1800);
+}
+
+function showResult() {
+  quizScreen.style.display = "none";
+  resultScreen.classList.add("show");
+
+  const code =
+    (state.answers.F >= state.answers.D ? "F" : "D") +
+    (state.answers.S >= state.answers.J ? "S" : "J") +
+    (state.answers.T >= state.answers.L ? "T" : "L");
+
+  const r = RESULTS[code];
+  state.currentCode = code; // 相性モーダル・画像保存で使用
+
+  // テーマカラーをCSS変数に反映（⑦タイプ別カラーテーマ）
+  document.documentElement.style.setProperty("--theme-color", r.color);
+  const resultScreenEl = document.getElementById("resultScreen");
+  resultScreenEl.style.setProperty("--theme-color", r.color);
+
+  // emoji要素を再生成して再生アニメーションをリトリガー
+  const emojiEl = document.getElementById("resultEmoji");
+  emojiEl.textContent = r.emoji;
+  emojiEl.style.animation = "none";
+  void emojiEl.offsetWidth;
+  emojiEl.style.animation = "";
+
+  document.getElementById("resultName").textContent = r.name;
+  document.getElementById("resultName").style.color = r.color;
+  document.getElementById("resultCode").textContent = code;
+  document.getElementById("resultDesc").textContent = r.desc;
+
+  document.getElementById("rarityStars").textContent = "★".repeat(r.rarity) + "☆".repeat(5 - r.rarity);
+  document.getElementById("rarityRate").textContent = `出現率 ${r.rate}`;
+
+  const phraseBox = document.getElementById("phraseBox");
+  phraseBox.style.animation = "none";
+  void phraseBox.offsetWidth;
+  phraseBox.textContent = r.phrase;
+  phraseBox.style.animation = "";
+  phraseBox.style.background = `linear-gradient(120deg, ${r.color}, #2B343A)`;
+
+  renderBarometer();
+  renderRadar();
+
+  const traitList = document.getElementById("traitList");
+  traitList.innerHTML = "";
+  r.traits.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    li.style.borderLeftColor = r.color;
+    traitList.appendChild(li);
+  });
+
+  // ③ あるあるエピソード
+  const factList = document.getElementById("factList");
+  factList.innerHTML = "";
+  (r.funFacts || []).forEach(f => {
+    const li = document.createElement("li");
+    li.textContent = f;
+    factList.appendChild(li);
+  });
+
+  // ⑤ 成長アドバイス
+  document.getElementById("growthBox").textContent = r.growthTip || "";
+
+  document.getElementById("compatBox").textContent = r.compat;
+
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function renderRadar() {
+  // 5軸ステータスを、3軸(F/D, S/J, T/L)の回答数(各0-4)から算出
+  const stats = [
+    { label: "統率力", value: state.answers.F },   // 現場派の強さ
+    { label: "行動力", value: state.answers.S },   // 即断派の強さ
+    { label: "協調性", value: state.answers.T },   // チーム派の強さ
+    { label: "職人魂", value: state.answers.L },   // 職人魂派の強さ
+    { label: "慎重さ", value: state.answers.J },   // 慎重派の強さ
+  ];
+  const maxVal = 4; // 各軸は4問なので最大4
+
+  const canvas = document.getElementById("radarCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2 + 6;
+  const radius = Math.min(W, H) / 2 - 56;
+  const sides = stats.length;
+  const angleStep = (Math.PI * 2) / sides;
+  const startAngle = -Math.PI / 2;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // グリッド（同心の五角形、4段階）
+  const gridLevels = 4;
+  for (let level = gridLevels; level >= 1; level--) {
+    const r = (radius * level) / gridLevels;
+    ctx.beginPath();
+    for (let i = 0; i <= sides; i++) {
+      const angle = startAngle + angleStep * i;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = level === gridLevels ? "#C7CDD1" : "#DEE2E5";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 軸線
+  for (let i = 0; i < sides; i++) {
+    const angle = startAngle + angleStep * i;
+    const x = cx + radius * Math.cos(angle);
+    const y = cy + radius * Math.sin(angle);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "#DEE2E5";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // データ多角形
+  ctx.beginPath();
+  stats.forEach((s, i) => {
+    const ratio = s.value / maxVal;
+    const r = radius * ratio;
+    const angle = startAngle + angleStep * i;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = "rgba(255,107,53,0.32)";
+  ctx.fill();
+  ctx.strokeStyle = "#FF6B35";
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // データ点
+  stats.forEach((s, i) => {
+    const ratio = s.value / maxVal;
+    const r = radius * ratio;
+    const angle = startAngle + angleStep * i;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "#D9501E";
+    ctx.fill();
+  });
+
+  // ラベル
+  ctx.font = "bold 14px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillStyle = "#37474F";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  stats.forEach((s, i) => {
+    const angle = startAngle + angleStep * i;
+    const labelR = radius + 28;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+    ctx.fillText(s.label, x, y);
+  });
+}
+
+function renderBarometer() {
+  const AXES_PER_SIDE = 4; // 各軸は4問ずつ出題される
+  const axes = [
+    { leftKey: "F", rightKey: "D", leftLabel: "現場派", rightLabel: "デスク派" },
+    { leftKey: "S", rightKey: "J", leftLabel: "即断派", rightLabel: "慎重派" },
+    { leftKey: "T", rightKey: "L", leftLabel: "チーム派", rightLabel: "職人魂派" },
+  ];
+
+  const box = document.getElementById("barometerBox");
+  box.innerHTML = "";
+
+  axes.forEach(axis => {
+    const leftVal = state.answers[axis.leftKey];
+    const rightVal = state.answers[axis.rightKey];
+    const total = leftVal + rightVal || AXES_PER_SIDE;
+    const leftPct = Math.round((leftVal / total) * 100);
+    const rightPct = 100 - leftPct;
+
+    const row = document.createElement("div");
+    row.className = "baro-row";
+    row.innerHTML = `
+      <div class="baro-labels">
+        <span class="baro-label-left">${axis.leftLabel}</span>
+        <span class="baro-label-right">${axis.rightLabel}</span>
+      </div>
+      <div class="baro-track">
+        <div class="baro-fill-left" style="width:${leftPct}%"></div>
+        <div class="baro-fill-right" style="width:${rightPct}%"></div>
+        <div class="baro-center-dot"></div>
+      </div>
+      <div class="baro-score">${leftVal} : ${rightVal}（${leftPct}% / ${rightPct}%）</div>
+    `;
+    box.appendChild(row);
+  });
+}
+
+document.getElementById("btnRetry").addEventListener("click", () => {
+  resultScreen.classList.remove("show");
+  startScreen.style.display = "block";
+  window.scrollTo({ top: 0, behavior: "auto" });
+});
+
+/* ===================== ② 全タイプ相性早見表モーダル ===================== */
+const compatOverlay = document.getElementById("compatModalOverlay");
+
+document.getElementById("btnShowCompat").addEventListener("click", () => {
+  const code = state.currentCode;
+  if (!code) return;
+  const r = RESULTS[code];
+  document.getElementById("compatModalSub").textContent = `あなた（${r.name}）との相性`;
+
+  const compatList = document.getElementById("compatList");
+  compatList.innerHTML = "";
+
+  const markInfo = {
+    "◎": { cls: "mark-great", label: "最高" },
+    "○": { cls: "mark-good", label: "良好" },
+    "△": { cls: "mark-tricky", label: "要調整" },
+  };
+
+  Object.keys(RESULTS).forEach(otherCode => {
+    const other = RESULTS[otherCode];
+    const mark = COMPAT_MATRIX[code][otherCode];
+    const info = markInfo[mark] || { cls: "", label: "" };
+    const li = document.createElement("li");
+    if (otherCode === code) li.classList.add("is-self");
+    li.innerHTML = `
+      <span>${other.emoji} ${other.name}${otherCode === code ? "（自分）" : ""}</span>
+      <span class="compat-mark ${info.cls}">${mark}</span>
+    `;
+    compatList.appendChild(li);
+  });
+
+  compatOverlay.classList.add("show");
+});
+
+document.getElementById("btnCloseCompat").addEventListener("click", () => {
+  compatOverlay.classList.remove("show");
+});
+
+compatOverlay.addEventListener("click", e => {
+  if (e.target === compatOverlay) compatOverlay.classList.remove("show");
+});
+
+/* ===================== ① 結果カード画像を保存 ===================== */
+document.getElementById("btnSaveCard").addEventListener("click", () => {
+  const code = state.currentCode;
+  if (!code) return;
+  const r = RESULTS[code];
+  drawShareCard(r, code);
+});
+
+function drawShareCard(r, code) {
+  const canvas = document.getElementById("shareCardCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+
+  // 背景グラデーション
+  const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+  bgGrad.addColorStop(0, "#22292D");
+  bgGrad.addColorStop(1, r.color);
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // 装飾の円
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = "#FFFFFF";
+  ctx.beginPath(); ctx.arc(W - 60, 80, 140, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(50, H - 140, 180, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // タイトルバッジ
+  ctx.textAlign = "center";
+  ctx.fillStyle = "rgba(255,255,255,0.85)";
+  ctx.font = "bold 20px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillText("建築タイプ診断", W / 2, 70);
+
+  // カード本体（白背景の角丸矩形）
+  const tabReserve = 44; // タブが右に張り出す分の余白
+  const cardX = 40, cardY = 100, cardW = W - 80 - tabReserve, cardH = H - 280;
+
+  // ① 背面タブ（現在地以外の7タイプ）を先に描画 → カードの下敷きになる
+  drawBackgroundTabs(ctx, cardX, cardY, cardW, cardH, code);
+
+  // ② 白いカード本体を上から重ねる（背面タブの左側を隠し、右の張り出し部分だけ見せる）
+  roundRect(ctx, cardX, cardY, cardW, cardH, 28);
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fill();
+
+  const cardCx = cardX + cardW / 2; // カード中央（タブ分のズレを考慮）
+
+  // 絵文字
+  ctx.font = "76px sans-serif";
+  ctx.fillText(r.emoji, cardCx, cardY + 100);
+
+  // タイプ名
+  ctx.fillStyle = r.color;
+  ctx.font = "bold 38px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillText(r.name, cardCx, cardY + 156);
+
+  // コード＋レア度
+  ctx.fillStyle = "#37474F";
+  ctx.font = "bold 17px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillText(code, cardCx, cardY + 188);
+
+  ctx.fillStyle = "#F9A825";
+  ctx.font = "24px sans-serif";
+  const stars = "★".repeat(r.rarity) + "☆".repeat(5 - r.rarity);
+  ctx.fillText(stars, cardCx, cardY + 224);
+
+  ctx.fillStyle = "#6B7280";
+  ctx.font = "bold 15px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillText(`出現率 ${r.rate}`, cardCx, cardY + 250);
+
+  // 必殺フレーズ
+  const phraseY = cardY + 300;
+  roundRect(ctx, cardX + 30, phraseY - 26, cardW - 60, 54, 14);
+  ctx.fillStyle = "#2B343A";
+  ctx.fill();
+  ctx.fillStyle = "#FFD700";
+  ctx.font = "bold 17px 'M PLUS Rounded 1c', sans-serif";
+  wrapText(ctx, r.phrase, cardCx, phraseY + 5, cardW - 90, 21);
+
+  // 特徴（最大3つ）
+  ctx.textAlign = "left";
+  ctx.font = "bold 16px 'M PLUS Rounded 1c', sans-serif";
+  let ty = phraseY + 62;
+  (r.traits || []).slice(0, 3).forEach(t => {
+    ctx.fillStyle = r.color;
+    ctx.fillText("●", cardX + 36, ty);
+    ctx.fillStyle = "#333333";
+    ctx.fillText(t, cardX + 58, ty);
+    ty += 30;
+  });
+
+  // ---- STATUS（五角形レーダーチャート） ----
+  const statusTitleY = ty + 22;
+  ctx.textAlign = "center";
+  ctx.fillStyle = r.color;
+  ctx.font = "bold 16px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillText("STATUS", cardCx, statusTitleY);
+
+  const radarStats = [
+    { label: "統率力", value: state.answers.F },
+    { label: "行動力", value: state.answers.S },
+    { label: "協調性", value: state.answers.T },
+    { label: "職人魂", value: state.answers.L },
+    { label: "慎重さ", value: state.answers.J },
+  ];
+  const radarMax = 4;
+  const radarCx = cardCx;
+  const radarCy = statusTitleY + 96;
+  const radarR = 68;
+  drawRadarChart(ctx, radarCx, radarCy, radarR, radarStats, radarMax, r.color);
+
+  // ---- SNS向け注釈（カード下部・白カード内・明示的に2行で表示） ----
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#9AA1A6";
+  ctx.font = "11.5px 'M PLUS Rounded 1c', sans-serif";
+  const noteLineH = 16;
+  const noteY = cardY + cardH - 20 - noteLineH / 2;
+  ctx.fillText("※本診断はエンタメ目的の遊びコンテンツです。", cardCx, noteY);
+  ctx.fillText("性格や能力を断定するものではありません。", cardCx, noteY + noteLineH);
+
+  // ③ 現在地タブを最前面に描画（カード本体やコンテンツの上から重ねて、手前に飛び出て見せる）
+  drawCurrentTab(ctx, cardX, cardY, cardW, cardH, code, r.color);
+
+  // フッター（カード外）
+  ctx.fillStyle = "rgba(255,255,255,0.75)";
+  ctx.font = "14px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillText("建築タイプ診断で結果をチェック！", W / 2, H - 50);
+
+  // ダウンロード
+  const link = document.createElement("a");
+  link.download = `建築タイプ診断_${r.name}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+// 全8タイプのスロット位置を計算（背面・前面の両関数で共通利用）
+function computeTabSlots(cardX, cardY, cardW, cardH) {
+  const codes = Object.keys(RESULTS);
+  const n = codes.length;
+  const marginTop = 36, marginBottom = 36;
+  const zoneH = cardH - marginTop - marginBottom;
+  const slotH = zoneH / n;
+  const normalW = 26, normalH = slotH * 0.58;
+  const currentW = 56, currentH = slotH * 0.86;
+  const px = cardX + cardW - 10; // カード右端より少し内側からタブが右へ張り出す基準線
+
+  return codes.map((c, i) => {
+    const slotCenterY = cardY + marginTop + slotH * i + slotH / 2;
+    return { code: c, slotCenterY, normalW, normalH, currentW, currentH, px };
+  });
+}
+
+// ① 背面タブ：現在地以外の7タイプを、少し控えめな色味で先に描画（カードの下敷きになる）
+function drawBackgroundTabs(ctx, cardX, cardY, cardW, cardH, currentCode) {
+  const slots = computeTabSlots(cardX, cardY, cardW, cardH);
+  slots.forEach(s => {
+    if (s.code === currentCode) return; // 現在地は前面で別途描画
+    const tabY = s.slotCenterY - s.normalH / 2;
+    roundRectRightOnly(ctx, s.px, tabY, s.normalW, s.normalH, 7);
+    ctx.fillStyle = "#E7E9EB";
+    ctx.fill();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#D0D4D7";
+    ctx.stroke();
+
+    drawVerticalCode(ctx, s.code, s.px + s.normalW / 2, tabY + s.normalH / 2, "#9AA0A5", 10.5);
+  });
+}
+
+// ② 現在地タブ：最前面に、影つき・タイプカラーで強調して描画（カードの上に手前へ飛び出て見える）
+function drawCurrentTab(ctx, cardX, cardY, cardW, cardH, currentCode, currentColor) {
+  const slots = computeTabSlots(cardX, cardY, cardW, cardH);
+  const target = slots.find(s => s.code === currentCode);
+  if (!target) return;
+  const tabY = target.slotCenterY - target.currentH / 2;
+
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,0.35)";
+  ctx.shadowBlur = 12;
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 4;
+  roundRectRightOnly(ctx, target.px, tabY, target.currentW, target.currentH, 10);
+  ctx.fillStyle = currentColor;
+  ctx.fill();
+  ctx.restore();
+
+  drawVerticalCode(ctx, currentCode, target.px + target.currentW / 2, tabY + target.currentH / 2, "#FFFFFF", 17);
+}
+
+// タブの左側（カードに接する側）はストレート、右側（外に張り出す側）だけ角丸
+function roundRectRightOnly(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x, y); // 左上（ストレート）
+  ctx.lineTo(x + w - r, y); // 上辺
+  ctx.arcTo(x + w, y, x + w, y + r, r); // 右上の角丸
+  ctx.lineTo(x + w, y + h - r); // 右辺
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r); // 右下の角丸
+  ctx.lineTo(x, y + h); // 下辺
+  ctx.closePath(); // 左辺（ストレート）で左上に戻る
+}
+
+function drawVerticalCode(ctx, code, cx, cy, color, fontSize) {
+  ctx.fillStyle = color;
+  ctx.font = `bold ${fontSize}px 'M PLUS Rounded 1c', sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const chars = code.split("");
+  const lineH = fontSize + 3;
+  const totalH = lineH * chars.length;
+  let y = cy - totalH / 2 + lineH / 2;
+  chars.forEach(ch => {
+    ctx.fillText(ch, cx, y);
+    y += lineH;
+  });
+  ctx.textBaseline = "alphabetic";
+}
+
+function drawRadarChart(ctx, cx, cy, radius, stats, maxVal, color) {
+  const sides = stats.length;
+  const angleStep = (Math.PI * 2) / sides;
+  const startAngle = -Math.PI / 2;
+
+  // グリッド（4段階の同心多角形）
+  const gridLevels = 4;
+  for (let level = gridLevels; level >= 1; level--) {
+    const r = (radius * level) / gridLevels;
+    ctx.beginPath();
+    for (let i = 0; i <= sides; i++) {
+      const angle = startAngle + angleStep * i;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = level === gridLevels ? "#C7CDD1" : "#E5E8EA";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 軸線
+  for (let i = 0; i < sides; i++) {
+    const angle = startAngle + angleStep * i;
+    const x = cx + radius * Math.cos(angle);
+    const y = cy + radius * Math.sin(angle);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "#E5E8EA";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // データ多角形
+  ctx.beginPath();
+  stats.forEach((s, i) => {
+    const ratio = s.value / maxVal;
+    const r = radius * ratio;
+    const angle = startAngle + angleStep * i;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.globalAlpha = 0.32;
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.2;
+  ctx.stroke();
+
+  // データ点
+  stats.forEach((s, i) => {
+    const ratio = s.value / maxVal;
+    const r = radius * ratio;
+    const angle = startAngle + angleStep * i;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  });
+
+  // ラベル
+  ctx.font = "bold 13px 'M PLUS Rounded 1c', sans-serif";
+  ctx.fillStyle = "#37474F";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  stats.forEach((s, i) => {
+    const angle = startAngle + angleStep * i;
+    const labelR = radius + 20;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+    ctx.fillText(s.label, x, y);
+  });
+  ctx.textBaseline = "alphabetic";
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const chars = text.split("");
+  let line = "";
+  const lines = [];
+  chars.forEach(ch => {
+    const testLine = line + ch;
+    if (ctx.measureText(testLine).width > maxWidth && line.length > 0) {
+      lines.push(line);
+      line = ch;
+    } else {
+      line = testLine;
+    }
+  });
+  lines.push(line);
+  const startY = y - ((lines.length - 1) * lineHeight) / 2;
+  lines.forEach((l, i) => {
+    ctx.fillText(l, x, startY + i * lineHeight);
+  });
+}
+</script>
+</body>
+</html>
