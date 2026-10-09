@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>グリーンファイル道場 ～クイズに挑戦～</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,13 +20,14 @@
     --light: #F3FBF5;
     --border: #CFEFDA;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     font-family: "M PLUS Rounded 1c", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
     font-weight: 700;
     margin: 0;
     padding: 0;
     color: #1A2B1F;
+    overflow-x: hidden;
   }
   body {
     min-height: 100vh;
@@ -390,6 +391,7 @@
     box-shadow: 0 0 50px rgba(255,215,0,0.85), 0 20px 50px rgba(0,0,0,0.35);
     transform: scale(0);
     animation: mc-pop 0.6s cubic-bezier(.34,1.56,.64,1) forwards;
+    max-width: 90vw;
   }
   @keyframes mc-pop {
     0% { transform: scale(0) rotate(-8deg); opacity: 0; }
@@ -413,6 +415,99 @@
     font-weight: 800;
     color: #6B4A00;
     margin-top: 6px;
+  }
+
+  /* =========================================================
+     📱 スマホ表示対応（モバイルレイアウト）
+     ========================================================= */
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+
+    .hero { margin-bottom: 12px; }
+    .hero .badge-emoji { font-size: 40px; }
+    .hero h1 { font-size: 24px; margin: 8px 0 4px 0; letter-spacing: 0.5px; }
+    .hero p { font-size: 13px; line-height: 1.5; }
+
+    .card { padding: 18px 14px; border-radius: 18px; border-width: 3px; }
+
+    .start-screen h2 { font-size: 20px; margin-bottom: 8px; }
+    .start-screen p { font-size: 14px; }
+
+    /* レベル選択：3列→1列に積む */
+    .level-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 16px 0 4px 0;
+    }
+    .level-btn {
+      min-height: auto;
+      padding: 14px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      border-radius: 16px;
+    }
+    .level-btn .emoji { font-size: 30px; flex-shrink: 0; }
+    .level-btn .name { font-size: 17px; margin-top: 0; }
+    .level-btn .desc { font-size: 12.5px; margin-top: 2px; }
+
+    .master-btn { margin-top: 12px; min-height: auto; border-radius: 16px; }
+    .master-inner { flex-direction: row; justify-content: flex-start; text-align: left; padding: 14px 14px; gap: 12px; }
+    .master-inner .emoji { font-size: 30px; }
+    .master-inner .name { font-size: 17px; margin-top: 0; }
+    .master-inner .desc { font-size: 12px; margin-top: 2px; }
+
+    /* 出題画面 */
+    .progress-row { font-size: 13px; margin-bottom: 12px; }
+    .progress-bar-outer { height: 10px; margin: 0 8px; }
+    .score-pill { font-size: 13px; padding: 5px 10px; border-radius: 12px; }
+
+    .category-tag { font-size: 12.5px; padding: 6px 12px; margin-bottom: 10px; border-radius: 12px; }
+    .question-text { font-size: 18px; margin-bottom: 14px; }
+
+    .options { gap: 10px; }
+    .option-btn {
+      padding: 16px 14px;
+      font-size: 16px;
+      min-height: 56px;
+      border-radius: 14px;
+      line-height: 1.4;
+    }
+
+    .feedback { padding: 14px; font-size: 14.5px; margin-top: 12px; border-radius: 12px; }
+    .feedback .fb-title { font-size: 16.5px; margin-bottom: 6px; }
+
+    .next-btn { padding: 16px; font-size: 16.5px; margin-top: 14px; border-radius: 14px; }
+
+    /* 結果画面 */
+    .result-emoji { font-size: 52px; }
+    .result-rank { font-size: 21px; margin: 6px 0 2px 0; }
+    .result-score { font-size: 15px; margin-bottom: 14px; }
+    .result-bar-wrap { height: 14px; margin-bottom: 14px; }
+
+    .review-list h3 { font-size: 15px; margin-bottom: 8px; }
+    .review-item { padding: 12px 14px; font-size: 13.5px; border-radius: 12px; margin-bottom: 8px; }
+    .review-item .rv-head { font-size: 14.5px; }
+
+    .source-note { padding: 12px 14px; font-size: 13px; margin-top: 14px; border-radius: 12px; gap: 8px; }
+    .source-note .sn-emoji { font-size: 20px; }
+
+    .result-actions { flex-direction: column; gap: 10px; margin-top: 14px; }
+    .result-actions button { padding: 16px; font-size: 15px; border-radius: 14px; }
+
+    .idle-note { font-size: 11px; margin-top: 10px; }
+
+    .mc-crown { font-size: 46px; }
+    .mc-title { font-size: 21px; }
+    .mc-sub { font-size: 13px; }
+    .master-clear-banner { padding: 20px 26px; border-radius: 18px; }
+  }
+
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 20px; }
+    .question-text { font-size: 16.5px; }
+    .option-btn { font-size: 14.5px; padding: 14px 12px; }
   }
 </style>
 </head>
@@ -761,6 +856,7 @@ function burstConfetti(x, y) {
 }
 
 function eventPoint(e) {
+  if (e.changedTouches && e.changedTouches[0]) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
   if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
   const rect = e.currentTarget.getBoundingClientRect();
   return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
