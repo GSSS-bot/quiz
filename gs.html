@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グリーンファイル道場 ～クイズに挑戦～</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1E8E4F;
+    --green-dark: #146339;
+    --green-bright: #3DD16F;
+    --navy: #1E2761;
+    --orange: #FF8A3D;
+    --yellow: #FFD166;
+    --red: #E8495C;
+    --gray: #5B6472;
+    --light: #F3FBF5;
+    --border: #CFEFDA;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    font-family: "M PLUS Rounded 1c", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    color: #1A2B1F;
+  }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 10% 8%, rgba(255,255,255,0.18) 0, rgba(255,255,255,0) 18%),
+      radial-gradient(circle at 92% 15%, rgba(255,209,102,0.25) 0, rgba(255,209,102,0) 22%),
+      radial-gradient(circle at 85% 90%, rgba(61,209,111,0.35) 0, rgba(61,209,111,0) 28%),
+      linear-gradient(160deg, var(--green-dark) 0%, var(--green) 45%, #22A35C 100%);
+    padding: 22px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  /* ---- Header ---- */
+  .hero { text-align: center; color: #fff; margin-bottom: 18px; }
+  .hero .badge-emoji { font-size: 58px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25)); }
+  .hero h1 {
+    font-size: 34px;
+    margin: 10px 0 6px 0;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  }
+  .hero p { font-size: 17px; opacity: 0.95; margin: 0; font-weight: 700; }
+
+  /* ---- Card ---- */
+  .card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 30px 28px;
+    box-shadow: 0 16px 38px rgba(0,0,0,0.3);
+    border: 4px solid var(--green-bright);
+    position: relative;
+  }
+
+  /* ---- Start screen ---- */
+  .start-screen { text-align: center; }
+  .start-screen h2 { color: var(--green-dark); font-size: 27px; margin-bottom: 12px; font-weight: 900; }
+  .start-screen p { color: var(--gray); font-size: 17px; line-height: 1.7; font-weight: 700; }
+  .level-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 22px 0 6px 0;
+  }
+  .level-btn {
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 10px;
+    cursor: pointer;
+    background: var(--light);
+    transition: transform .1s ease, box-shadow .1s ease;
+    font-family: inherit;
+    min-height: 150px;
+  }
+  .level-btn:active { transform: scale(0.96); }
+  .level-btn:hover { border-color: var(--green); box-shadow: 0 8px 16px rgba(30,142,79,0.25); }
+  .level-btn .emoji { font-size: 44px; }
+  .level-btn .name { font-weight: 900; color: var(--green-dark); font-size: 20px; margin-top: 8px; }
+  .level-btn .desc { color: var(--gray); font-size: 14px; margin-top: 6px; font-weight: 700; line-height: 1.5; }
+
+  /* ---- Master button (giragira) ---- */
+  .master-btn {
+    position: relative;
+    width: 100%;
+    margin-top: 18px;
+    min-height: 120px;
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: linear-gradient(120deg, #B8860B, #FFD700, #FFF3B0, #FFD700, #B8860B);
+    background-size: 300% 300%;
+    animation: master-gradient 6s ease infinite;
+    box-shadow: 0 0 0 3px #FFF3B0, 0 10px 24px rgba(184,134,11,0.45);
+  }
+  @keyframes master-gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .master-btn:active { transform: scale(0.97); }
+  .master-shine {
+    position: absolute;
+    top: 0; left: -60%;
+    width: 50%; height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-20deg);
+    animation: master-shine-move 5.5s ease-in-out infinite;
+  }
+  @keyframes master-shine-move {
+    0% { left: -60%; }
+    18% { left: 130%; }
+    100% { left: 130%; }
+  }
+  .master-inner {
+    position: relative;
+    z-index: 2;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .master-inner .emoji { font-size: 40px; text-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+  .master-inner .name {
+    font-weight: 900;
+    font-size: 22px;
+    margin-top: 6px;
+    color: #5A3E00;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  }
+  .master-inner .desc {
+    color: #6B4A00;
+    font-size: 14px;
+    margin-top: 6px;
+    font-weight: 800;
+    line-height: 1.5;
+  }
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 16px;
+    animation: sparkle-pop 1.1s ease-out forwards;
+    z-index: 3;
+  }
+  @keyframes sparkle-pop {
+    0% { opacity: 0; transform: translateY(0) scale(0.4) rotate(0deg); }
+    30% { opacity: 1; transform: translateY(-8px) scale(1.1) rotate(45deg); }
+    100% { opacity: 0; transform: translateY(-26px) scale(0.6) rotate(90deg); }
+  }
+
+  /* ---- Progress ---- */
+  .progress-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    font-size: 17px;
+    color: var(--green-dark);
+    font-weight: 900;
+  }
+  .progress-bar-outer {
+    flex: 1;
+    height: 14px;
+    background: var(--border);
+    border-radius: 7px;
+    margin: 0 14px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--yellow), var(--green));
+    width: 0%;
+    transition: width .3s ease;
+  }
+  .score-pill {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 16px;
+    padding: 7px 16px;
+    font-weight: 900;
+    font-size: 17px;
+    white-space: nowrap;
+  }
+
+  /* ---- Question ---- */
+  .category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    padding: 8px 16px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+  }
+  .question-text {
+    font-size: 24px;
+    font-weight: 900;
+    color: #16331F;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .options { display: flex; flex-direction: column; gap: 14px; }
+  .option-btn {
+    text-align: left;
+    padding: 24px 22px;
+    border: 3px solid var(--border);
+    border-radius: 18px;
+    background: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .12s ease;
+    min-height: 72px;
+    color: #223;
+    line-height: 1.5;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--green); background: var(--light); }
+  .option-btn:active:not(:disabled) { transform: scale(0.98); }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct { border-color: var(--green); background: #E3F9EB; color: var(--green-dark); }
+  .option-btn.wrong { border-color: var(--red); background: #FDEBEC; color: var(--red); }
+
+  .feedback {
+    margin-top: 18px;
+    padding: 20px;
+    border-radius: 16px;
+    font-size: 18px;
+    line-height: 1.7;
+    font-weight: 700;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: #E3F9EB; color: #145A32; border: 3px solid #9FE3B9; }
+  .feedback.wrong-fb { background: #FDEBEC; color: #8c2a2a; border: 3px solid #F3C2C2; }
+  .feedback .fb-title { font-weight: 900; margin-bottom: 8px; font-size: 21px; }
+
+  .next-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 22px;
+    border: none;
+    border-radius: 18px;
+    background: linear-gradient(90deg, var(--green), var(--green-dark));
+    color: #fff;
+    font-weight: 900;
+    font-size: 21px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 8px 16px rgba(30,142,79,0.3);
+    font-family: inherit;
+  }
+  .next-btn:active { transform: scale(0.98); }
+  .next-btn.show { display: block; }
+
+  /* ---- Result ---- */
+  .result-screen { text-align: center; display: none; }
+  .result-screen.show { display: block; }
+  .result-emoji { font-size: 72px; }
+  .result-rank { font-size: 29px; font-weight: 900; color: var(--green-dark); margin: 10px 0 4px 0; }
+  .result-score { font-size: 20px; color: var(--gray); margin-bottom: 20px; font-weight: 800; }
+  .result-bar-wrap { background: var(--border); border-radius: 10px; height: 20px; overflow: hidden; margin-bottom: 20px; }
+  .result-bar { height: 100%; background: linear-gradient(90deg, var(--yellow), var(--green)); width: 0%; transition: width 1s ease; }
+
+  .review-list { text-align: left; margin-top: 12px; }
+  .review-list h3 { font-size: 19px; color: var(--green-dark); margin-bottom: 12px; font-weight: 900; }
+  .review-item {
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    font-size: 16.5px;
+    line-height: 1.65;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    background: var(--light);
+  }
+  .review-item.is-correct { border-left: 7px solid var(--green); }
+  .review-item.is-wrong { border-left: 7px solid var(--red); background: #FFF7F7; }
+  .review-item .rv-head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; font-size: 18px; }
+  .review-item .rv-q { font-weight: 900; }
+  .review-item .rv-your { color: var(--red); margin-top: 6px; }
+  .review-item .rv-correct { color: var(--green-dark); margin-top: 4px; }
+  .review-item .rv-explain { color: #444; margin-top: 8px; font-weight: 600; }
+
+  .source-note {
+    margin-top: 20px;
+    background: #FFF6E5;
+    border: 3px dashed var(--orange);
+    border-radius: 16px;
+    padding: 18px 20px;
+    font-size: 17px;
+    color: #7a4b16;
+    font-weight: 800;
+    line-height: 1.7;
+    text-align: left;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .source-note .sn-emoji { font-size: 26px; flex-shrink: 0; }
+
+  .result-actions { display: flex; gap: 14px; margin-top: 20px; }
+  .result-actions button {
+    flex: 1;
+    padding: 22px;
+    border-radius: 18px;
+    border: none;
+    font-weight: 900;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 18px;
+  }
+  .btn-retry { background: linear-gradient(90deg, var(--green), var(--green-dark)); color: #fff; box-shadow: 0 8px 16px rgba(30,142,79,0.3); }
+  .btn-home { background: #fff; color: var(--green-dark); border: 3px solid var(--green) !important; }
+  .result-actions button:active { transform: scale(0.97); }
+
+  .idle-note {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 700;
+  }
+
+  /* ---- Confetti ---- */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confetti-fly .7s ease-out forwards;
+  }
+  @keyframes confetti-fly {
+    to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+  }
+
+  #fireworksCanvas {
+    position: fixed;
+    inset: 0;
+    display: none;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ---- Master Clear special celebration ---- */
+  .gold-confetti-piece {
+    position: fixed;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 10001;
+    animation: gold-fall linear forwards;
+  }
+  @keyframes gold-fall {
+    to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0.15; }
+  }
+
+  .master-clear-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 65%);
+  }
+  .master-clear-overlay.show { display: flex; }
+  .master-clear-banner {
+    background: linear-gradient(135deg, #FFD700, #FFF3B0, #FFD700);
+    border: 4px solid #B8860B;
+    border-radius: 24px;
+    padding: 30px 44px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255,215,0,0.85), 0 20px 50px rgba(0,0,0,0.35);
+    transform: scale(0);
+    animation: mc-pop 0.6s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes mc-pop {
+    0% { transform: scale(0) rotate(-8deg); opacity: 0; }
+    60% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .mc-crown { font-size: 64px; animation: mc-bounce 1s ease-in-out infinite; }
+  @keyframes mc-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .mc-title {
+    font-size: 30px;
+    font-weight: 900;
+    color: #5A3E00;
+    margin-top: 8px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  }
+  .mc-sub {
+    font-size: 16px;
+    font-weight: 800;
+    color: #6B4A00;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+<canvas id="fireworksCanvas"></canvas>
+<div class="master-clear-overlay" id="masterClearOverlay">
+  <div class="master-clear-banner">
+    <div class="mc-crown">👑</div>
+    <div class="mc-title">マスタークリア！</div>
+    <div class="mc-sub">グリーンファイル完全制覇、おめでとう✨</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="badge-emoji">🟩🟩📋🟩🟩</div>
+    <h1>グリーンファイル道場</h1>
+    <p>台帳ルールをクイズで楽しく覚えよう！　｜　㈱小俣組 グリーンファイル作成・提出ガイド準拠</p>
+  </div>
+
+  <div class="card">
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="start-screen">
+      <h2>腕試しレベルを選んでください</h2>
+      <p>レベルをタップしてスタート！</p>
+      <div class="level-grid">
+        <button class="level-btn" data-level="easy">
+          <div class="emoji">🌱</div>
+          <div class="name">初級</div>
+          <div class="desc">ランダム5問<br>サクッと腕試し</div>
+        </button>
+        <button class="level-btn" data-level="normal">
+          <div class="emoji">🔧</div>
+          <div class="name">中級</div>
+          <div class="desc">ランダム10問<br>しっかり復習</div>
+        </button>
+        <button class="level-btn" data-level="hard">
+          <div class="emoji">🏗️</div>
+          <div class="name">上級</div>
+          <div class="desc">ランダム15問<br>腰を据えて挑戦</div>
+        </button>
+      </div>
+
+      <button class="level-btn master-btn" data-level="master">
+        <div class="master-shine"></div>
+        <div class="master-inner">
+          <div class="emoji">👑✨</div>
+          <div class="name">マスター</div>
+          <div class="desc">全28問 コンプリートチャレンジ！ガイドを完全制覇せよ<br>👀 全問正解で特別演出！？</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quizScreen" style="display:none;">
+      <div class="progress-row">
+        <span id="qCounter">問題 1 / 5</span>
+        <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+        <span class="score-pill" id="scorePill">0 pt</span>
+      </div>
+
+      <div class="category-tag" id="categoryTag">導入・基本ルール</div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsArea"></div>
+
+      <div class="feedback" id="feedbackArea">
+        <div class="fb-title" id="fbTitle"></div>
+        <div id="fbText"></div>
+      </div>
+
+      <button class="next-btn" id="nextBtn">次の問題へ</button>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="resultScreen" class="result-screen">
+      <div class="result-emoji" id="resultEmoji">🏆</div>
+      <div class="result-rank" id="resultRank">達人！</div>
+      <div class="result-score" id="resultScoreText">5 / 5 問 正解</div>
+      <div class="result-bar-wrap"><div class="result-bar" id="resultBar"></div></div>
+
+      <div class="review-list" id="reviewList">
+        <h3>全問ふりかえり</h3>
+        <div id="reviewItems"></div>
+      </div>
+
+      <div class="source-note">
+        <div class="sn-emoji">📘</div>
+        <div>詳細は現場員に「グリーンファイル作成・提出ガイド2026」を見せてもらってください。</div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-retry" id="btnRetrySame">🔁 同じレベルに再挑戦</button>
+        <button class="btn-home" id="btnHome">🏠 レベル選択に戻る</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="idle-note">しばらく操作がないと、自動的にレベル選択画面に戻ります</div>
+</div>
+
+<script>
+/* ===================== フルクイズバンク（ガイド全22ページ対応・28問） ===================== */
+const FULL_BANK = [
+  {
+    category: "導入・基本ルール",
+    q: "グリーンファイル作成の流れの中で「初回のみ」実施する手続きはどれですか？",
+    options: ["オーナー企業登録", "企業招待の承認", "グリーンファイルの作成", "再下請負通知書の提出"],
+    correct: 0,
+    explain: "グリーンサイトでは、初回のみ「オーナー企業登録」の実施が必要です。その後、㈱小俣組からの企業招待を受け、提出依頼メールの契約日程を確認してグリーンファイルを作成・提出する流れになります。"
+  },
+  {
+    category: "導入・基本ルール",
+    q: "グリーンファイルは、現場入場の何日前までに提出するルールになっていますか？",
+    options: ["1週間前", "1ヵ月前", "3ヵ月前", "入場当日でよい"],
+    correct: 1,
+    explain: "現場入場の1ヵ月前までに、分かっている内容でいったん提出するルールです。全部揃っていなくても提出可能で、決まり次第更新・再提出します。"
+  },
+  {
+    category: "導入・基本ルール",
+    q: "グリーンファイルは全ての書類が揃っていないと提出できませんか？",
+    options: ["揃っていないと提出不可", "揃っていなくても分かっている内容でいったん提出できる", "二次業者分のみ先に提出すればよい", "そもそも提出自体が不要になる場合がある"],
+    correct: 1,
+    explain: "最初から全部そろっていなくても提出可能です。1ヵ月前までに分かっている内容でいったん提出し、契約書類や再下請負業者が決まり次第、追加・更新して再提出します。"
+  },
+  {
+    category: "一次業者様へのお願い",
+    q: "一次業者様にお願いしていることは、次のうちどれですか？",
+    options: ["下請け業者の書類も確認・取りまとめて提出する", "下請け業者の分は元請が直接確認するので不要", "二次以降の業者の書類は見なくてよい", "チェックリストは提出必須の書類である"],
+    correct: 0,
+    explain: "二次以降の業者が作成・更新した書類を、一次業者が確認・取りまとめ、不備のない状態で元請へ提出する流れです。チェックリスト自体の提出は不要です。"
+  },
+  {
+    category: "一次業者様へのお願い",
+    q: "グリーンファイルの内容を更新・保存しただけで、提出は完了したことになりますか？",
+    options: ["なる（保存＝提出完了）", "ならない（別途「書類提出」ボタンが必要）", "元請に電話すれば完了になる", "翌日自動で提出扱いになる"],
+    correct: 1,
+    explain: "「更新 ≠ 提出完了」です。更新後は必ず「書類提出」ボタンをクリックしないと、元請側に反映されません。下請け業者が更新した場合も、一次業者が再提出する必要があります。"
+  },
+  {
+    category: "一次業者様へのお願い",
+    q: "チェックリストについて正しい説明はどれですか？",
+    options: ["チェックリスト自体も提出が必要な書類である", "不備を防ぐための確認用書類で、提出は不要", "二次業者のみが使うものである", "元請が記入して業者に渡すものである"],
+    correct: 1,
+    explain: "チェックリストは提出する書類ではなく、不備を防ぐ確認用書類です。提出依頼メールに添付されるので提出前に確認し、チェックリスト自体の提出は不要です。下請け業者へ共有することもできます。"
+  },
+  {
+    category: "一次業者様へのお願い",
+    q: "提出する書類や修正依頼の内容が分かりにくい場合、まず相談すべき先はどれですか？",
+    options: ["現場の作業員に直接聞く", "弊社書類担当者、または建設サイトヘルプデスク", "何も相談せず自己判断で進める", "二次業者に全て任せる"],
+    correct: 1,
+    explain: "グリーンサイトの操作方法が分かりにくい場合はマニュアルを確認し、提出書類や修正依頼の内容が分かりにくい場合は弊社書類担当者へお問い合わせください。お電話でのお問い合わせは建設サイトヘルプデスクも利用できます。"
+  },
+  {
+    category: "一次業者様へのお願い",
+    q: "提出の際にコメントを入力することは必須ですか？",
+    options: ["必須であり、必ず入力しなければならない", "必須ではないが、スムーズな確認のために推奨されている", "コメント欄自体が存在しない", "二次業者のみ入力が必要"],
+    correct: 1,
+    explain: "コメントの入力は必須ではありませんが、スムーズな確認のためのお願いです。「○○を更新しました」など、変更箇所・内容・対応予定を伝えると確認がスムーズになります。"
+  },
+  {
+    category: "一次業者様へのお願い",
+    q: "不備の解消が難しい・対応できないかもしれない場合、一次業者はまず誰に相談すべきですか？",
+    options: ["グリーンサイトのサポートセンターのみ", "現場所長へ直接相談し、結果を書類担当者へ報告する", "何もせず放置してよい", "下請け業者に判断を任せる"],
+    correct: 1,
+    explain: "現場の判断が必要な内容は書類担当者だけでは決められません。現場所長へ直接相談し、相談内容と結果を書類担当者へ報告してください。報告がないと不備未解消のまま確認が続くことがあります。"
+  },
+  {
+    category: "契約書類",
+    q: "グリーンサイトに登録する契約書類は、基本的にどの組み合わせで作成しますか？",
+    options: ["現場ごとの契約書のみ", "会社間の基本契約（または約款）＋現場ごとの契約（注文書・請書等）", "口頭合意のみで可", "本契約は不要で見積書だけでよい"],
+    correct: 1,
+    explain: "会社間の基本契約書（または必要事項を記載した約款）と、現場ごとの注文書・請書や単価契約書などをセットで作成・登録する必要があります。"
+  },
+  {
+    category: "契約書類",
+    q: "基本契約書(約款)に記載すべき事項として正しいものはどれですか？",
+    options: ["天災等の対応", "作業員の氏名と生年月日", "現場の駐車場の有無", "近隣住民の名前"],
+    correct: 0,
+    explain: "基本契約書(約款)には、設計変更・延期・中止時の対応や天災等の対応、物価変動による変更、第三者への損害賠償など、業種・工事内容に応じた重要事項を記載します。"
+  },
+  {
+    category: "契約書類",
+    q: "現場ごとの契約書を開いたとき、確認できる必要がある項目はいくつですか？",
+    options: ["3項目", "5項目（工事名称・工事場所・工事内容・工期・契約金額および支払い方法）", "10項目", "特に決まりはない"],
+    correct: 1,
+    explain: "工事名称／工事場所／工事内容／工期／契約金額および支払い方法の5項目が確認できる書類を作成します。公共工事は金額マスキング不可、民間工事はマスキング可です。"
+  },
+  {
+    category: "契約書類",
+    q: "公共工事の契約書で、契約金額のマスキングは可能ですか？",
+    options: ["公共工事・民間工事ともにマスキング可", "公共工事はマスキング不可、民間工事はマスキング可", "公共工事はマスキング可、民間工事は不可", "どちらも不可"],
+    correct: 1,
+    explain: "公共工事はマスキング不可、民間工事はマスキング可というルールです。金額マスキングの不備は多発しているポイントなので要注意です。"
+  },
+  {
+    category: "契約書類",
+    q: "下位業者（二次・三次等）の契約日は、上位業者と比べてどうする必要がありますか？",
+    options: ["上位業者より前でもよい", "上位業者と同日または後にする", "関係なくバラバラでよい", "必ず1ヵ月以上後にする"],
+    correct: 1,
+    explain: "下位業者の契約日は上位業者と同日または後にし、工期も上位業者と同期間または工期内に収めます。現場入場日より前に契約を締結することも必要です。"
+  },
+  {
+    category: "契約書類",
+    q: "現場入場日と契約締結のタイミングについて正しいのはどれですか？",
+    options: ["現場入場日より後に契約を締結すればよい", "現場入場日より前に契約を締結する", "契約と入場日の前後関係に決まりはない", "工期終了後に契約すればよい"],
+    correct: 1,
+    explain: "契約日程の矛盾に注意し、現場入場日より前に契約を締結する必要があります。契約日→工期開始日→現場入場日→工期終了日の順序に矛盾がないか確認してください。"
+  },
+  {
+    category: "従業員情報",
+    q: "従業員の社会保険（健康保険・年金保険・雇用保険）について、「未加入」のまま登録してよいですか？",
+    options: ["よい、後で直せばよい", "原則不可。「加入」または「適用除外」を登録する", "健康保険だけは未加入でもよい", "元請の承認があれば未加入でよい"],
+    correct: 1,
+    explain: "原則として社会保険「未加入」の作業員は現場作業できません。加入手続き中でやむを得ず未加入を登録する場合も、速やかに手続きを進め完了次第更新する必要があります。"
+  },
+  {
+    category: "従業員情報",
+    q: "外国人就労者について、従業員情報で確認・更新すべき項目はどれですか？",
+    options: ["運転免許証のみ", "在留資格・在留カード・パスポート", "住民票の写しのみ", "健康保険証のみ"],
+    correct: 1,
+    explain: "外国人就労者については、在留資格、在留カード、パスポート、指定書・計画書などを確認し、期限切れや相違を解消してください。グリーンサイトの期限切れ管理機能も活用できます。"
+  },
+  {
+    category: "配置者",
+    q: "作業員名簿・再下請負通知書の「現場代理人」は、「設置しない」を選んでもよいですか？",
+    options: ["よい、任意項目である", "原則不可。必ず現場代理人を登録する（一人親方は本人）", "元請の現場だけ必須", "二次業者以降は不要"],
+    correct: 1,
+    explain: "現場代理人は必須項目で、原則「設置しない」は選択しません。一人親方の場合は本人を登録し、作業員名簿と再下請負通知書の両方で確認します。"
+  },
+  {
+    category: "配置者",
+    q: "再下請負通知書の「専門技術者」項目は、いつ登録しますか？",
+    options: ["すべての現場で必ず登録する", "現場から登録の指示があった場合のみ登録する（任意）", "二次業者のみ必須", "登録自体が廃止された"],
+    correct: 1,
+    explain: "専門技術者は任意項目で、現場からの指示がある場合のみ登録対象です。迷ったらいったん空白のまま登録して問題ありません。"
+  },
+  {
+    category: "企業情報",
+    q: "企業情報の社会保険（健康保険・年金保険・雇用保険）が「未加入」の場合、どうすればよいですか？",
+    options: ["そのままでよい", "企業情報を更新し、再下請負通知書も最新情報へ更新する", "従業員情報だけ直せば企業情報は直さなくてよい", "元請に報告するだけでよい"],
+    correct: 1,
+    explain: "従業員情報と企業情報、どちらも「未加入」は不可です。企業情報を更新したら、再下請負通知書についても最新情報へ更新する必要があります。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "契約金額が税込でいくら以上の場合、建設業許可情報（写し含む）の登録が必要ですか？",
+    options: ["100万円以上", "500万円以上", "1,000万円以上", "金額に関わらず常に必要"],
+    correct: 1,
+    explain: "契約金額税込500万円以上の場合、建設業許可の登録が必須です。軽微な作業に該当する場合は「不要」を選択できます。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "建設業許可を「不要」として選択できるのは、どのような場合ですか？",
+    options: ["契約金額が税込500万円未満の軽微な作業に該当する場合", "主任技術者が専任の場合", "元請が公共工事の場合", "許可の更新手続き中の場合"],
+    correct: 0,
+    explain: "契約金額税込500万円以上の場合は許可情報の登録が必須ですが、軽微な作業に該当する場合は「不要」を選択できます。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "建設業許可の「更新日」として登録すべき日付はどれですか？",
+    options: ["通知が届いた日", "有効期間の開始日（取得日）", "申請書を提出した日", "現場入場日"],
+    correct: 1,
+    explain: "更新日＝有効期間の開始日であり、通知日ではありません。許可番号・更新日の登録誤りが多いポイントなので、更新後は一度プレビューで確認しましょう。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "建設業許可の有効期間は、いつまで切れないようにする必要がありますか？",
+    options: ["契約締結日まで", "自社の工期末まで", "現場入場日まで", "とくに期限の制約はない"],
+    correct: 1,
+    explain: "工期や入場期間にかかわらず、自社の工期末まで許可の有効期間が切れないようにする必要があります。工期末までに切れる場合は許可を更新し、企業情報も更新します。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "主任技術者項目の選択要否について、正しい組み合わせはどれですか？",
+    options: ["建設業許可を選択→主任技術者も選択必須、許可「不要」→主任技術者も「不要」", "建設業許可の選択状況に関わらず主任技術者は常に「専任」", "主任技術者は許可を選択した場合のみ「不要」にできる", "主任技術者の選択は現場代理人が決定する"],
+    correct: 0,
+    explain: "建設業許可を選択する場合は主任技術者も選択必須、建設業許可が「不要」の場合は主任技術者も「不要」とします。なお契約金額税込4,500万円以上の場合は「専任」を選択します。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "契約金額が税込でいくら以上の場合、主任技術者は再下請負通知書で「専任」を選択する必要がありますか？",
+    options: ["1,000万円以上", "3,000万円以上", "4,500万円以上", "専任を選ぶ機会はない"],
+    correct: 2,
+    explain: "契約金額が税込4,500万円以上の場合、通知書の主任技術者項目で「専任」を選択します。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "主任技術者の雇用関係を示す書類として、最も優先すべきなのはどれですか？",
+    options: ["本人の自己申告メモ", "公的機関が発行した書類（雇用保険資格取得確認通知書等）", "口頭での説明", "名刺のコピーのみ"],
+    correct: 1,
+    explain: "公的機関が発行した書類（雇用保険被保険者資格取得等確認通知書、監理技術者資格者証など）を優先し、氏名・会社名・発行日が確認できる、読み取れる画質のものを登録します。個人情報はマスキングが必要です。"
+  },
+  {
+    category: "許可・主任技術者",
+    q: "主任技術者の雇用関係書類は、グリーンサイトのどこに登録しますか？",
+    options: ["雇用・保険＞雇用情報＞恒常的な雇用関係を示す書類", "安全衛生＞資格情報", "契約書類＞基本契約", "配置者＞現場代理人"],
+    correct: 0,
+    explain: "雇用関係書類は「雇用・保険 ＞ 雇用情報 ＞ 恒常的な雇用関係を示す書類」へ登録します。事業主の方は「事業主であること」の証明書類を登録するか、コメント等で別途ご提出をお願いします。"
+  },
+];
+
+const LEVEL_COUNTS = { easy: 5, normal: 10, hard: 15, master: FULL_BANK.length };
+
+const RANKS = [
+  { min: 1.0, emoji: "🏆", rank: "達人！" },
+  { min: 0.8, emoji: "🥇", rank: "職人！" },
+  { min: 0.6, emoji: "🥈", rank: "修行中！" },
+  { min: 0.0, emoji: "🥉", rank: "弟子入りレベル！" },
+];
+
+let state = {
+  level: null,
+  questions: [],
+  index: 0,
+  score: 0,
+  answered: false,
+  answerLog: [], // { q, options, userIndex, correctIndex, isCorrect, explain }
+};
+
+const startScreen = document.getElementById("startScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+
+/* ===================== 控えめなクラッカー演出 ===================== */
+function burstConfetti(x, y) {
+  const colors = ["#3DD16F", "#FF8A3D", "#FFD166", "#1E2761", "#FFFFFF"];
+  const count = 10;
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("div");
+    el.className = "confetti-piece";
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 36 + Math.random() * 34;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance - 16;
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.setProperty("--dx", dx + "px");
+    el.style.setProperty("--dy", dy + "px");
+    el.style.setProperty("--rot", Math.random() * 360 + "deg");
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 720);
+  }
+}
+
+function eventPoint(e) {
+  if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  const rect = e.currentTarget.getBoundingClientRect();
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+}
+
+/* ===================== 結果画面の花火演出 ===================== */
+function launchFireworks(durationMs, colorOverride) {
+  durationMs = durationMs || 3800;
+  const canvas = document.getElementById("fireworksCanvas");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = "block";
+  const ctx = canvas.getContext("2d");
+  const colors = colorOverride || ["#3DD16F", "#FFD166", "#FF8A3D", "#1E2761", "#E8495C", "#FFFFFF"];
+  let particles = [];
+
+  function spawnBurst(x, y) {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const count = 34;
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+      const speed = 2.2 + Math.random() * 2.6;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 55 + Math.random() * 20,
+        maxLife: 75,
+        color,
+        size: 2 + Math.random() * 2,
+      });
+    }
+  }
+
+  const burstTimer = setInterval(() => {
+    spawnBurst(
+      canvas.width * (0.15 + Math.random() * 0.7),
+      canvas.height * (0.18 + Math.random() * 0.32)
+    );
+  }, 480);
+
+  let elapsed = 0;
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.045;
+      p.life--;
+      ctx.globalAlpha = Math.max(p.life / p.maxLife, 0);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    particles = particles.filter(p => p.life > 0);
+    elapsed += 16;
+
+    if (elapsed < durationMs || particles.length > 0) {
+      requestAnimationFrame(frame);
+    } else {
+      clearInterval(burstTimer);
+      canvas.style.display = "none";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  requestAnimationFrame(frame);
+  setTimeout(() => clearInterval(burstTimer), durationMs);
+}
+
+/* ===================== マスタークリア特別演出 ===================== */
+function spawnGoldConfettiFromTop() {
+  const el = document.createElement("div");
+  el.className = "gold-confetti-piece";
+  const goldColors = ["#FFD700", "#FFF3B0", "#FFA500", "#FFFFFF", "#B8860B"];
+  const size = 7 + Math.random() * 7;
+  const startX = Math.random() * window.innerWidth;
+  el.style.width = size + "px";
+  el.style.height = size + "px";
+  el.style.left = startX + "px";
+  el.style.top = "-20px";
+  el.style.background = goldColors[Math.floor(Math.random() * goldColors.length)];
+  const dx = (Math.random() * 160 - 80) + "px";
+  const dy = (window.innerHeight + 60) + "px";
+  const duration = 1.8 + Math.random() * 1.2;
+  el.style.setProperty("--dx", dx);
+  el.style.setProperty("--dy", dy);
+  el.style.setProperty("--rot", Math.random() * 720 + "deg");
+  el.style.animationDuration = duration + "s";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), duration * 1000 + 100);
+}
+
+function launchMasterClear() {
+  const overlay = document.getElementById("masterClearOverlay");
+  overlay.classList.add("show");
+
+  let ticks = 0;
+  const rainTimer = setInterval(() => {
+    for (let i = 0; i < 4; i++) spawnGoldConfettiFromTop();
+    ticks++;
+    if (ticks > 28) clearInterval(rainTimer);
+  }, 130);
+
+  setTimeout(() => {
+    overlay.classList.remove("show");
+  }, 3400);
+}
+
+/* ===================== 自動リセット（無操作タイムアウト） ===================== */
+const INACTIVITY_MS = 45000;
+let inactivityTimer = null;
+
+function scheduleAutoReset() {
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    if (quizScreen.style.display !== "none" || resultScreen.classList.contains("show")) {
+      goHome();
+    }
+  }, INACTIVITY_MS);
+}
+
+["click", "touchstart"].forEach(evt => {
+  document.addEventListener(evt, scheduleAutoReset, { passive: true });
+});
+scheduleAutoReset();
+
+function goHome() {
+  resultScreen.classList.remove("show");
+  quizScreen.style.display = "none";
+  startScreen.style.display = "block";
+  document.getElementById("fireworksCanvas").style.display = "none";
+}
+
+/* ===================== シャッフル・出題構成 ===================== */
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// 問題を複製し、選択肢の並び順もシャッフルして正解indexを再計算する
+function shuffleQuestionOptions(original) {
+  const optionIdx = original.options.map((opt, i) => ({ opt, i }));
+  const shuffled = shuffle(optionIdx);
+  const newOptions = shuffled.map(o => o.opt);
+  const newCorrect = shuffled.findIndex(o => o.i === original.correct);
+  return {
+    category: original.category,
+    q: original.q,
+    options: newOptions,
+    correct: newCorrect,
+    explain: original.explain,
+  };
+}
+
+/* ===================== クイズ本体 ===================== */
+document.querySelectorAll(".level-btn").forEach(btn => {
+  btn.addEventListener("click", e => {
+    const p = eventPoint(e);
+    burstConfetti(p.x, p.y);
+    startQuiz(btn.dataset.level);
+  });
+});
+
+/* ===================== マスターボタンのキラキラ演出 ===================== */
+(function sparkleLoop() {
+  const masterBtn = document.querySelector(".master-btn");
+  if (!masterBtn) return;
+  const symbols = ["✨", "⭐", "💫"];
+  setInterval(() => {
+    if (startScreen.style.display === "none") return;
+    const rect = masterBtn.getBoundingClientRect();
+    const s = document.createElement("span");
+    s.className = "sparkle";
+    s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    s.style.left = (rect.left + Math.random() * rect.width) + "px";
+    s.style.top = (rect.top + Math.random() * rect.height) + "px";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1100);
+  }, 900);
+})();
+
+function startQuiz(level) {
+  state.level = level;
+  const count = LEVEL_COUNTS[level] || FULL_BANK.length;
+  const pool = shuffle(FULL_BANK).slice(0, count);
+  state.questions = pool.map(shuffleQuestionOptions);
+  state.index = 0;
+  state.score = 0;
+  state.answered = false;
+  state.answerLog = [];
+
+  startScreen.style.display = "none";
+  resultScreen.classList.remove("show");
+  quizScreen.style.display = "block";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  state.answered = false;
+  const q = state.questions[state.index];
+  document.getElementById("qCounter").textContent = `問題 ${state.index + 1} / ${state.questions.length}`;
+  document.getElementById("scorePill").textContent = `${state.score} pt`;
+  document.getElementById("progressBar").style.width = `${(state.index / state.questions.length) * 100}%`;
+  document.getElementById("categoryTag").textContent = q.category;
+  document.getElementById("questionText").textContent = q.q;
+
+  const optionsArea = document.getElementById("optionsArea");
+  optionsArea.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.addEventListener("click", e => selectAnswer(i, e));
+    optionsArea.appendChild(btn);
+  });
+
+  document.getElementById("feedbackArea").classList.remove("show", "correct-fb", "wrong-fb");
+  document.getElementById("nextBtn").classList.remove("show");
+}
+
+function selectAnswer(i, e) {
+  if (state.answered) return;
+  state.answered = true;
+  const p = eventPoint(e);
+  burstConfetti(p.x, p.y);
+
+  const q = state.questions[state.index];
+  const isCorrect = i === q.correct;
+  const buttons = document.querySelectorAll(".option-btn");
+  buttons.forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.correct) b.classList.add("correct");
+    if (idx === i && i !== q.correct) b.classList.add("wrong");
+  });
+
+  const fb = document.getElementById("feedbackArea");
+  const fbTitle = document.getElementById("fbTitle");
+  const fbText = document.getElementById("fbText");
+  fbText.textContent = q.explain;
+
+  if (isCorrect) {
+    state.score += 1;
+    fb.classList.add("show", "correct-fb");
+    fbTitle.textContent = "⭕ 正解！";
+  } else {
+    fb.classList.add("show", "wrong-fb");
+    fbTitle.textContent = "❌ 不正解";
+  }
+
+  state.answerLog.push({
+    q: q.q,
+    options: q.options,
+    userIndex: i,
+    correctIndex: q.correct,
+    isCorrect,
+    explain: q.explain,
+  });
+
+  document.getElementById("scorePill").textContent = `${state.score} pt`;
+  document.getElementById("nextBtn").classList.add("show");
+}
+
+document.getElementById("nextBtn").addEventListener("click", e => {
+  const p = eventPoint(e);
+  burstConfetti(p.x, p.y);
+  state.index += 1;
+  if (state.index >= state.questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+});
+
+function showResult() {
+  quizScreen.style.display = "none";
+  resultScreen.classList.add("show");
+
+  const total = state.questions.length;
+  const ratio = state.score / total;
+  const rankInfo = RANKS.find(r => ratio >= r.min);
+
+  document.getElementById("resultEmoji").textContent = rankInfo.emoji;
+  document.getElementById("resultRank").textContent = rankInfo.rank;
+  document.getElementById("resultScoreText").textContent = `${state.score} / ${total} 問 正解`;
+
+  setTimeout(() => {
+    document.getElementById("resultBar").style.width = `${ratio * 100}%`;
+  }, 100);
+
+  if (state.level === "master" && state.score === total) {
+    launchFireworks(6000, ["#FFD700", "#FFF3B0", "#FFA500", "#FFFFFF", "#B8860B"]);
+    launchMasterClear();
+  } else {
+    launchFireworks();
+  }
+
+  const reviewItems = document.getElementById("reviewItems");
+  reviewItems.innerHTML = "";
+  state.answerLog.forEach((log, idx) => {
+    const div = document.createElement("div");
+    div.className = "review-item " + (log.isCorrect ? "is-correct" : "is-wrong");
+
+    const headEmoji = log.isCorrect ? "⭕" : "❌";
+    let html = `<div class="rv-head">${headEmoji} <span class="rv-q">問${idx + 1}. ${log.q}</span></div>`;
+    if (!log.isCorrect) {
+      html += `<div class="rv-your">あなたの回答：${log.options[log.userIndex]}</div>`;
+    }
+    html += `<div class="rv-correct">正解：${log.options[log.correctIndex]}</div>`;
+    html += `<div class="rv-explain">${log.explain}</div>`;
+    div.innerHTML = html;
+    reviewItems.appendChild(div);
+  });
+}
+
+document.getElementById("btnRetrySame").addEventListener("click", e => {
+  const p = eventPoint(e);
+  burstConfetti(p.x, p.y);
+  startQuiz(state.level);
+});
+
+document.getElementById("btnHome").addEventListener("click", e => {
+  const p = eventPoint(e);
+  burstConfetti(p.x, p.y);
+  goHome();
+});
+</script>
+</body>
+</html>
