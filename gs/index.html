@@ -536,9 +536,8 @@
 
 <div class="wrap">
   <div class="hero">
-    <div class="badge-emoji">🟩🟩📋🟩🟩</div>
     <h1>グリーンファイル道場</h1>
-    <p>台帳ルールをクイズで楽しく覚えよう！　｜　㈱小俣組 グリーンファイル作成・提出ガイド準拠</p>
+    <p>ルールをクイズで楽しく覚えよう！　｜　㈱小俣組 グリーンファイル作成・提出ガイド準拠</p>
   </div>
 
   <div class="card" id="mainCard">
@@ -1142,6 +1141,8 @@ function selectAnswer(i, e) {
 
   document.getElementById("scorePill").textContent = `${state.score} pt`;
   const nextBtn = document.getElementById("nextBtn");
+  const isLastQuestion = state.index === state.questions.length - 1;
+  nextBtn.textContent = isLastQuestion ? "結果を見る" : "次の問題へ";
   nextBtn.classList.add("show");
 
   // 選択肢クリック後、フィードバックと「次の問題へ」ボタンが見える位置まで
