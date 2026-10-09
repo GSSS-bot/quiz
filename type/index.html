@@ -36,12 +36,10 @@
     padding: 22px;
   }
   .wrap { max-width: 820px; margin: 0 auto; }
-
   .hero { text-align: center; color: #fff; margin-bottom: 18px; }
   .hero .badge { font-size: 46px; }
   .hero h1 { font-size: 30px; margin: 10px 0 6px 0; font-weight: 900; text-shadow: 0 3px 8px rgba(0,0,0,0.3); }
   .hero p { font-size: 15.5px; opacity: 0.9; margin: 0; }
-
   .card {
     background: #fff;
     border-radius: 22px;
@@ -49,7 +47,6 @@
     box-shadow: 0 16px 36px rgba(0,0,0,0.3);
     border: 4px solid var(--yellow);
   }
-
   /* start screen */
   .start-screen { text-align: center; }
   .start-screen h2 { color: var(--steel); font-size: 23px; margin-bottom: 10px; }
@@ -83,13 +80,11 @@
     color: var(--steel);
     font-weight: 800;
   }
-
   /* quiz */
   .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
   .progress-bar-outer { flex: 1; height: 12px; background: var(--border); border-radius: 6px; overflow: hidden; }
   .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--yellow), var(--orange)); width: 0%; transition: width .3s ease; }
   .q-counter { font-size: 14px; color: var(--steel); font-weight: 900; white-space: nowrap; }
-
   .question-text { font-size: 21px; font-weight: 900; color: #16202A; margin-bottom: 20px; line-height: 1.6; }
   .options { display: flex; flex-direction: column; gap: 14px; }
   .option-btn {
@@ -108,7 +103,6 @@
   }
   .option-btn:hover { border-color: var(--orange); background: #FFF6F2; }
   .option-btn:active { transform: scale(0.98); }
-
   .nav-row { display: flex; gap: 10px; margin-top: 18px; }
   .nav-btn {
     flex: 1;
@@ -126,7 +120,6 @@
   .nav-btn:active { transform: scale(0.97); }
   .nav-btn:disabled { opacity: 0.4; cursor: default; }
   .nav-btn:disabled:hover { border-color: var(--border); color: var(--gray); }
-
   /* result */
   .result-screen { text-align: center; display: none; }
   .result-screen.show { display: block; }
@@ -142,7 +135,6 @@
     60% { transform: scale(1.25) rotate(8deg); opacity: 1; }
     100% { transform: scale(1) rotate(0deg); opacity: 1; }
   }
-
   .rarity-row {
     display: flex;
     justify-content: center;
@@ -170,7 +162,6 @@
     border-radius: 12px;
     font-weight: 800;
   }
-
   .phrase-box {
     background: linear-gradient(120deg, #2B343A, #37474F);
     color: #FFD700;
@@ -238,7 +229,6 @@
     margin-bottom: 16px;
   }
   #radarCanvas { max-width: 100%; height: auto; }
-
   .barometer-box {
     text-align: left;
     background: var(--light);
@@ -292,7 +282,6 @@
     margin-top: 4px;
     font-weight: 700;
   }
-
   .fact-list { text-align: left; margin: 0 0 16px 0; padding: 0; list-style: none; }
   .fact-list li {
     padding: 10px 14px;
@@ -305,7 +294,6 @@
     color: #5C4A1E;
   }
   .fact-list li::before { content: "💬 "; }
-
   .growth-box {
     text-align: left;
     background: #EEF7F1;
@@ -318,14 +306,12 @@
     margin-bottom: 18px;
     line-height: 1.7;
   }
-
   .btn-compat, .btn-save {
     background: #fff;
     color: var(--steel);
     border: 2px solid var(--border);
   }
   .btn-compat:active, .btn-save:active { transform: scale(0.97); }
-
   .compat-modal-overlay {
     display: none;
     position: fixed;
@@ -403,7 +389,6 @@
   .compat-list .compat-mark.mark-great { color: #E8B000; }
   .compat-list .compat-mark.mark-good { color: #1565C0; }
   .compat-list .compat-mark.mark-tricky { color: var(--orange-dark); }
-
   .compat-box {
     text-align: left;
     background: #EAF3FF;
@@ -427,9 +412,7 @@
   }
   .btn-retry { background: linear-gradient(90deg, var(--orange), var(--orange-dark)); color: #fff; }
   .btn-retry:active { transform: scale(0.97); }
-
   .idle-note { text-align: center; margin-top: 14px; font-size: 12px; color: rgba(255,255,255,0.8); }
-
   /* ---- Question slide transition ---- */
   .quiz-stage { position: relative; }
   .quiz-stage.slide-out-left { animation: slide-out-left .22s ease forwards; }
@@ -450,7 +433,6 @@
     from { transform: translateX(-40px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
-
   /* ---- Button ripple ---- */
   .option-btn, .start-btn, .nav-btn, .btn-retry {
     position: relative;
@@ -467,7 +449,6 @@
   @keyframes ripple-expand {
     to { transform: scale(1); opacity: 0; }
   }
-
   /* ---- Suspense screen ---- */
   .suspense-screen {
     text-align: center;
@@ -507,7 +488,6 @@
     0%, 80%, 100% { transform: translateY(0); opacity: .5; }
     40% { transform: translateY(-10px); opacity: 1; }
   }
-
   @media (max-width: 640px) {
     body { padding: 12px; }
     .hero { margin-bottom: 10px; }
@@ -531,12 +511,10 @@
     <div class="badge">🏗️</div>
     <h1>建築タイプ診断</h1>
   </div>
-
   <div class="card">
-
     <div id="startScreen" class="start-screen">
       <h2>あなたは何タイプ？</h2>
-      <p>直感でOK！深く考えず、パッと選んでください。<br>全8タイプの中からあなたのタイプを診断します。</p>
+      <p>直感でOK！深く考えず選んでください。<br>全8タイプからタイプを診断します。</p>
       <div class="type-preview">
         <div>棟梁タイプ</div>
         <div>職人魂タイプ</div>
@@ -549,7 +527,6 @@
       </div>
       <button class="start-btn" id="btnStart">診断スタート！</button>
     </div>
-
     <div id="quizScreen" style="display:none;">
       <div class="progress-row">
         <span class="q-counter" id="qCounter">質問 1 / 12</span>
@@ -564,47 +541,35 @@
         <button class="nav-btn nav-home" id="btnQuizHome">🏠 最初からやり直す</button>
       </div>
     </div>
-
     <div id="suspenseScreen" class="suspense-screen" style="display:none;">
       <div class="suspense-spinner">🏗️</div>
       <div class="suspense-text" id="suspenseText">診断中...</div>
       <div class="suspense-dots"><span></span><span></span><span></span></div>
     </div>
-
     <div id="resultScreen" class="result-screen">
       <div class="result-tag">あなたの建築タイプは…</div>
       <div class="result-emoji" id="resultEmoji">🏗️</div>
       <div class="result-name" id="resultName">棟梁タイプ</div>
       <div class="result-code" id="resultCode">FST</div>
-
       <div class="rarity-row">
         <span class="rarity-stars" id="rarityStars">★★★★☆</span>
         <span class="rarity-rate" id="rarityRate">出現率 12%</span>
       </div>
-
       <div class="phrase-box" id="phraseBox"></div>
-
       <div class="result-desc" id="resultDesc"></div>
-
       <div class="result-section-title">あなたの建築タイプ・ステータス</div>
       <div class="radar-box">
         <canvas id="radarCanvas" width="340" height="340"></canvas>
       </div>
-
       <div class="result-section-title">あなたのバランス診断</div>
       <div class="barometer-box" id="barometerBox"></div>
-
       <div class="result-section-title">こんな特徴があります</div>
       <ul class="trait-list" id="traitList"></ul>
-
       <div class="result-section-title">〇〇タイプのあるある</div>
       <ul class="fact-list" id="factList"></ul>
-
       <div class="result-section-title">さらに伸ばすワンポイント</div>
       <div class="growth-box" id="growthBox"></div>
-
       <div class="compat-box" id="compatBox"></div>
-
       <div class="result-actions">
         <button class="btn-compat" id="btnShowCompat">📊 全タイプ相性早見表</button>
         <button class="btn-save" id="btnSaveCard">💾 結果カードを保存</button>
@@ -613,9 +578,7 @@
         <button class="btn-retry" id="btnRetry">🔁 もう一度診断する</button>
       </div>
     </div>
-
   </div>
-
   <!-- 相性早見表モーダル -->
   <div class="compat-modal-overlay" id="compatModalOverlay">
     <div class="compat-modal">
@@ -628,18 +591,16 @@
       <ul class="compat-list" id="compatList"></ul>
     </div>
   </div>
-
   <!-- 結果カード画像生成用（非表示） -->
   <canvas id="shareCardCanvas" width="640" height="1060" style="display:none;"></canvas>
   <div class="idle-note">※この診断は遊び心のあるエンタメコンテンツです。<br>性格や能力を断定するものではありません。</div>
 </div>
-
 <script>
 /* ===================== 質問バンク（3軸×4問＝12問） ===================== */
 // 軸: F(現場派)/D(デスク派)、S(即断派)/J(慎重派)、T(チーム派)/L(職人魂派)
 const QUESTIONS = [
   { axis: "FD", text: "急な天候変化。あなたの最初の反応は？",
-    a: "すぐ現場に飛んで行って自分の目で確認したい", aVal: "F",
+    a: "現場に飛んで自分の目で確認したい", aVal: "F",
     b: "まず資料や連絡網で状況を整理したい", bVal: "D" },
   { axis: "FD", text: "休日、ふと目に入るのはどっち？",
     a: "近所の工事現場の進み具合", aVal: "F",
@@ -648,31 +609,29 @@ const QUESTIONS = [
     a: "現場の雰囲気や動線", aVal: "F",
     b: "工程表や予算の全体像", bVal: "D" },
   { axis: "FD", text: "好きな仕事の瞬間は？",
-    a: "体を動かして物事が形になっていく瞬間", aVal: "F",
+    a: "体を動かして物事が形になる瞬間", aVal: "F",
     b: "計画がきれいにハマった瞬間", bVal: "D" },
-
   { axis: "SJ", text: "現場でちょっとしたトラブル発生。あなたは？",
     a: "その場でパッと判断して動く", aVal: "S",
-    b: "一旦落ち着いて関係者に確認してから動く", bVal: "J" },
+    b: "落ち着いて確認してから動く", bVal: "J" },
   { axis: "SJ", text: "新しいやり方を提案されたら？",
     a: "面白そう、とりあえずやってみる", aVal: "S",
-    b: "リスクや前例をしっかり調べてから判断", bVal: "J" },
+    b: "リスクや前例を調べてから判断", bVal: "J" },
   { axis: "SJ", text: "スケジュールが押しているとき？",
     a: "勢いで一気に巻き返す", aVal: "S",
     b: "優先順位を整理して着実に戻す", bVal: "J" },
   { axis: "SJ", text: "決断を下すときに大事にしているのは？",
     a: "スピード感", aVal: "S",
     b: "確実性", bVal: "J" },
-
   { axis: "TL", text: "理想の仕事の進め方は？",
-    a: "みんなでワイワイ声を掛け合いながら", aVal: "T",
+    a: "みんなでワイワイ声を掛け合う", aVal: "T",
     b: "自分のペースで黙々と集中して", bVal: "L" },
   { axis: "TL", text: "後輩に仕事を教えるとしたら？",
-    a: "一緒にやりながら会話しつつ教える", aVal: "T",
+    a: "一緒にやりながら会話して教える", aVal: "T",
     b: "背中で見せて自分で気づかせる", bVal: "L" },
   { axis: "TL", text: "達成感を一番感じるのは？",
     a: "チーム全体でやり遂げたとき", aVal: "T",
-    b: "自分の腕前・仕事ぶりが認められたとき", bVal: "L" },
+    b: "自分の仕事ぶりが認められたとき", bVal: "L" },
   { axis: "TL", text: "飲み会やイベントに誘われたら？",
     a: "率先して参加し、場を盛り上げたい", aVal: "T",
     b: "気が向いたら参加する程度でいい", bVal: "L" },
@@ -775,7 +734,6 @@ const COMPAT_MATRIX = {
 };
 
 let state = { index: 0, answers: { F: 0, D: 0, S: 0, J: 0, T: 0, L: 0 }, history: [] };
-
 const startScreen = document.getElementById("startScreen");
 const quizScreen = document.getElementById("quizScreen");
 const resultScreen = document.getElementById("resultScreen");
@@ -922,7 +880,7 @@ function showResult() {
   const r = RESULTS[code];
   state.currentCode = code; // 相性モーダル・画像保存で使用
 
-  // テーマカラーをCSS変数に反映（⑦タイプ別カラーテーマ）
+  // テーマカラーをCSS変数に反映
   document.documentElement.style.setProperty("--theme-color", r.color);
   const resultScreenEl = document.getElementById("resultScreen");
   resultScreenEl.style.setProperty("--theme-color", r.color);
@@ -961,7 +919,7 @@ function showResult() {
     traitList.appendChild(li);
   });
 
-  // ③ あるあるエピソード
+  // あるあるエピソード
   const factList = document.getElementById("factList");
   factList.innerHTML = "";
   (r.funFacts || []).forEach(f => {
@@ -970,7 +928,7 @@ function showResult() {
     factList.appendChild(li);
   });
 
-  // ⑤ 成長アドバイス
+  // 成長アドバイス
   document.getElementById("growthBox").textContent = r.growthTip || "";
 
   document.getElementById("compatBox").textContent = r.compat;
@@ -979,16 +937,14 @@ function showResult() {
 }
 
 function renderRadar() {
-  // 5軸ステータスを、3軸(F/D, S/J, T/L)の回答数(各0-4)から算出
   const stats = [
-    { label: "統率力", value: state.answers.F },   // 現場派の強さ
-    { label: "行動力", value: state.answers.S },   // 即断派の強さ
-    { label: "協調性", value: state.answers.T },   // チーム派の強さ
-    { label: "職人魂", value: state.answers.L },   // 職人魂派の強さ
-    { label: "慎重さ", value: state.answers.J },   // 慎重派の強さ
+    { label: "統率力", value: state.answers.F },
+    { label: "行動力", value: state.answers.S },
+    { label: "協調性", value: state.answers.T },
+    { label: "職人魂", value: state.answers.L },
+    { label: "慎重さ", value: state.answers.J },
   ];
-  const maxVal = 4; // 各軸は4問なので最大4
-
+  const maxVal = 4;
   const canvas = document.getElementById("radarCanvas");
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
@@ -1000,7 +956,6 @@ function renderRadar() {
 
   ctx.clearRect(0, 0, W, H);
 
-  // グリッド（同心の五角形、4段階）
   const gridLevels = 4;
   for (let level = gridLevels; level >= 1; level--) {
     const r = (radius * level) / gridLevels;
@@ -1017,7 +972,6 @@ function renderRadar() {
     ctx.stroke();
   }
 
-  // 軸線
   for (let i = 0; i < sides; i++) {
     const angle = startAngle + angleStep * i;
     const x = cx + radius * Math.cos(angle);
@@ -1030,7 +984,6 @@ function renderRadar() {
     ctx.stroke();
   }
 
-  // データ多角形
   ctx.beginPath();
   stats.forEach((s, i) => {
     const ratio = s.value / maxVal;
@@ -1047,7 +1000,6 @@ function renderRadar() {
   ctx.lineWidth = 2.5;
   ctx.stroke();
 
-  // データ点
   stats.forEach((s, i) => {
     const ratio = s.value / maxVal;
     const r = radius * ratio;
@@ -1060,7 +1012,6 @@ function renderRadar() {
     ctx.fill();
   });
 
-  // ラベル
   ctx.font = "bold 14px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillStyle = "#37474F";
   ctx.textAlign = "center";
@@ -1075,7 +1026,7 @@ function renderRadar() {
 }
 
 function renderBarometer() {
-  const AXES_PER_SIDE = 4; // 各軸は4問ずつ出題される
+  const AXES_PER_SIDE = 4;
   const axes = [
     { leftKey: "F", rightKey: "D", leftLabel: "現場派", rightLabel: "デスク派" },
     { leftKey: "S", rightKey: "J", leftLabel: "即断派", rightLabel: "慎重派" },
@@ -1116,7 +1067,7 @@ document.getElementById("btnRetry").addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "auto" });
 });
 
-/* ===================== ② 全タイプ相性早見表モーダル ===================== */
+/* ===================== 全タイプ相性早見表モーダル ===================== */
 const compatOverlay = document.getElementById("compatModalOverlay");
 
 document.getElementById("btnShowCompat").addEventListener("click", () => {
@@ -1158,7 +1109,7 @@ compatOverlay.addEventListener("click", e => {
   if (e.target === compatOverlay) compatOverlay.classList.remove("show");
 });
 
-/* ===================== ① 結果カード画像を保存 ===================== */
+/* ===================== 結果カード画像を保存 ===================== */
 document.getElementById("btnSaveCard").addEventListener("click", () => {
   const code = state.currentCode;
   if (!code) return;
@@ -1171,50 +1122,41 @@ function drawShareCard(r, code) {
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
 
-  // 背景グラデーション
   const bgGrad = ctx.createLinearGradient(0, 0, W, H);
   bgGrad.addColorStop(0, "#22292D");
   bgGrad.addColorStop(1, r.color);
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // 装飾の円
   ctx.globalAlpha = 0.12;
   ctx.fillStyle = "#FFFFFF";
   ctx.beginPath(); ctx.arc(W - 60, 80, 140, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(50, H - 140, 180, 0, Math.PI * 2); ctx.fill();
   ctx.globalAlpha = 1;
 
-  // タイトルバッジ
   ctx.textAlign = "center";
   ctx.fillStyle = "rgba(255,255,255,0.85)";
   ctx.font = "bold 20px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillText("建築タイプ診断", W / 2, 70);
 
-  // カード本体（白背景の角丸矩形）
-  const tabReserve = 44; // タブが右に張り出す分の余白
+  const tabReserve = 44;
   const cardX = 40, cardY = 100, cardW = W - 80 - tabReserve, cardH = H - 280;
 
-  // ① 背面タブ（現在地以外の7タイプ）を先に描画 → カードの下敷きになる
   drawBackgroundTabs(ctx, cardX, cardY, cardW, cardH, code);
 
-  // ② 白いカード本体を上から重ねる（背面タブの左側を隠し、右の張り出し部分だけ見せる）
   roundRect(ctx, cardX, cardY, cardW, cardH, 28);
   ctx.fillStyle = "#FFFFFF";
   ctx.fill();
 
-  const cardCx = cardX + cardW / 2; // カード中央（タブ分のズレを考慮）
+  const cardCx = cardX + cardW / 2;
 
-  // 絵文字
   ctx.font = "76px sans-serif";
   ctx.fillText(r.emoji, cardCx, cardY + 100);
 
-  // タイプ名
   ctx.fillStyle = r.color;
   ctx.font = "bold 38px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillText(r.name, cardCx, cardY + 156);
 
-  // コード＋レア度
   ctx.fillStyle = "#37474F";
   ctx.font = "bold 17px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillText(code, cardCx, cardY + 188);
@@ -1228,7 +1170,6 @@ function drawShareCard(r, code) {
   ctx.font = "bold 15px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillText(`出現率 ${r.rate}`, cardCx, cardY + 250);
 
-  // 必殺フレーズ
   const phraseY = cardY + 300;
   roundRect(ctx, cardX + 30, phraseY - 26, cardW - 60, 54, 14);
   ctx.fillStyle = "#2B343A";
@@ -1237,7 +1178,6 @@ function drawShareCard(r, code) {
   ctx.font = "bold 17px 'M PLUS Rounded 1c', sans-serif";
   wrapText(ctx, r.phrase, cardCx, phraseY + 5, cardW - 90, 21);
 
-  // 特徴（最大3つ）
   ctx.textAlign = "left";
   ctx.font = "bold 16px 'M PLUS Rounded 1c', sans-serif";
   let ty = phraseY + 62;
@@ -1249,7 +1189,6 @@ function drawShareCard(r, code) {
     ty += 30;
   });
 
-  // ---- STATUS（五角形レーダーチャート） ----
   const statusTitleY = ty + 22;
   ctx.textAlign = "center";
   ctx.fillStyle = r.color;
@@ -1269,7 +1208,6 @@ function drawShareCard(r, code) {
   const radarR = 68;
   drawRadarChart(ctx, radarCx, radarCy, radarR, radarStats, radarMax, r.color);
 
-  // ---- SNS向け注釈（カード下部・白カード内・明示的に2行で表示） ----
   ctx.textAlign = "center";
   ctx.fillStyle = "#9AA1A6";
   ctx.font = "11.5px 'M PLUS Rounded 1c', sans-serif";
@@ -1278,22 +1216,18 @@ function drawShareCard(r, code) {
   ctx.fillText("※本診断はエンタメ目的の遊びコンテンツです。", cardCx, noteY);
   ctx.fillText("性格や能力を断定するものではありません。", cardCx, noteY + noteLineH);
 
-  // ③ 現在地タブを最前面に描画（カード本体やコンテンツの上から重ねて、手前に飛び出て見せる）
   drawCurrentTab(ctx, cardX, cardY, cardW, cardH, code, r.color);
 
-  // フッター（カード外）
   ctx.fillStyle = "rgba(255,255,255,0.75)";
   ctx.font = "14px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillText("建築タイプ診断で結果をチェック！", W / 2, H - 50);
 
-  // ダウンロード
   const link = document.createElement("a");
   link.download = `建築タイプ診断_${r.name}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
 
-// 全8タイプのスロット位置を計算（背面・前面の両関数で共通利用）
 function computeTabSlots(cardX, cardY, cardW, cardH) {
   const codes = Object.keys(RESULTS);
   const n = codes.length;
@@ -1302,7 +1236,7 @@ function computeTabSlots(cardX, cardY, cardW, cardH) {
   const slotH = zoneH / n;
   const normalW = 26, normalH = slotH * 0.58;
   const currentW = 56, currentH = slotH * 0.86;
-  const px = cardX + cardW - 10; // カード右端より少し内側からタブが右へ張り出す基準線
+  const px = cardX + cardW - 10;
 
   return codes.map((c, i) => {
     const slotCenterY = cardY + marginTop + slotH * i + slotH / 2;
@@ -1310,11 +1244,10 @@ function computeTabSlots(cardX, cardY, cardW, cardH) {
   });
 }
 
-// ① 背面タブ：現在地以外の7タイプを、少し控えめな色味で先に描画（カードの下敷きになる）
 function drawBackgroundTabs(ctx, cardX, cardY, cardW, cardH, currentCode) {
   const slots = computeTabSlots(cardX, cardY, cardW, cardH);
   slots.forEach(s => {
-    if (s.code === currentCode) return; // 現在地は前面で別途描画
+    if (s.code === currentCode) return;
     const tabY = s.slotCenterY - s.normalH / 2;
     roundRectRightOnly(ctx, s.px, tabY, s.normalW, s.normalH, 7);
     ctx.fillStyle = "#E7E9EB";
@@ -1322,12 +1255,10 @@ function drawBackgroundTabs(ctx, cardX, cardY, cardW, cardH, currentCode) {
     ctx.lineWidth = 1;
     ctx.strokeStyle = "#D0D4D7";
     ctx.stroke();
-
     drawVerticalCode(ctx, s.code, s.px + s.normalW / 2, tabY + s.normalH / 2, "#9AA0A5", 10.5);
   });
 }
 
-// ② 現在地タブ：最前面に、影つき・タイプカラーで強調して描画（カードの上に手前へ飛び出て見える）
 function drawCurrentTab(ctx, cardX, cardY, cardW, cardH, currentCode, currentColor) {
   const slots = computeTabSlots(cardX, cardY, cardW, cardH);
   const target = slots.find(s => s.code === currentCode);
@@ -1347,16 +1278,15 @@ function drawCurrentTab(ctx, cardX, cardY, cardW, cardH, currentCode, currentCol
   drawVerticalCode(ctx, currentCode, target.px + target.currentW / 2, tabY + target.currentH / 2, "#FFFFFF", 17);
 }
 
-// タブの左側（カードに接する側）はストレート、右側（外に張り出す側）だけ角丸
 function roundRectRightOnly(ctx, x, y, w, h, r) {
   ctx.beginPath();
-  ctx.moveTo(x, y); // 左上（ストレート）
-  ctx.lineTo(x + w - r, y); // 上辺
-  ctx.arcTo(x + w, y, x + w, y + r, r); // 右上の角丸
-  ctx.lineTo(x + w, y + h - r); // 右辺
-  ctx.arcTo(x + w, y + h, x + w - r, y + h, r); // 右下の角丸
-  ctx.lineTo(x, y + h); // 下辺
-  ctx.closePath(); // 左辺（ストレート）で左上に戻る
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x, y + h);
+  ctx.closePath();
 }
 
 function drawVerticalCode(ctx, code, cx, cy, color, fontSize) {
@@ -1380,7 +1310,6 @@ function drawRadarChart(ctx, cx, cy, radius, stats, maxVal, color) {
   const angleStep = (Math.PI * 2) / sides;
   const startAngle = -Math.PI / 2;
 
-  // グリッド（4段階の同心多角形）
   const gridLevels = 4;
   for (let level = gridLevels; level >= 1; level--) {
     const r = (radius * level) / gridLevels;
@@ -1397,7 +1326,6 @@ function drawRadarChart(ctx, cx, cy, radius, stats, maxVal, color) {
     ctx.stroke();
   }
 
-  // 軸線
   for (let i = 0; i < sides; i++) {
     const angle = startAngle + angleStep * i;
     const x = cx + radius * Math.cos(angle);
@@ -1410,7 +1338,6 @@ function drawRadarChart(ctx, cx, cy, radius, stats, maxVal, color) {
     ctx.stroke();
   }
 
-  // データ多角形
   ctx.beginPath();
   stats.forEach((s, i) => {
     const ratio = s.value / maxVal;
@@ -1429,7 +1356,6 @@ function drawRadarChart(ctx, cx, cy, radius, stats, maxVal, color) {
   ctx.lineWidth = 2.2;
   ctx.stroke();
 
-  // データ点
   stats.forEach((s, i) => {
     const ratio = s.value / maxVal;
     const r = radius * ratio;
@@ -1442,7 +1368,6 @@ function drawRadarChart(ctx, cx, cy, radius, stats, maxVal, color) {
     ctx.fill();
   });
 
-  // ラベル
   ctx.font = "bold 13px 'M PLUS Rounded 1c', sans-serif";
   ctx.fillStyle = "#37474F";
   ctx.textAlign = "center";
