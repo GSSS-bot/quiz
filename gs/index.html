@@ -452,11 +452,24 @@
     .level-btn .name { font-size: 17px; margin-top: 0; }
     .level-btn .desc { font-size: 12.5px; margin-top: 2px; }
 
+    /* マスターボタン：横一杯に使い、名前と説明を縦積みで余裕を持たせる */
     .master-btn { margin-top: 12px; min-height: auto; border-radius: 16px; }
-    .master-inner { flex-direction: row; justify-content: flex-start; text-align: left; padding: 14px 14px; gap: 12px; }
-    .master-inner .emoji { font-size: 30px; }
-    .master-inner .name { font-size: 17px; margin-top: 0; }
-    .master-inner .desc { font-size: 12px; margin-top: 2px; }
+    .master-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      padding: 16px 18px;
+      gap: 4px;
+    }
+    .master-inner .emoji-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .master-inner .emoji { font-size: 28px; }
+    .master-inner .name { font-size: 18px; margin-top: 0; white-space: nowrap; }
+    .master-inner .desc { font-size: 12.5px; margin-top: 4px; line-height: 1.6; width: 100%; }
 
     /* 出題画面 */
     .progress-row { font-size: 13px; margin-bottom: 12px; }
@@ -528,7 +541,7 @@
     <p>台帳ルールをクイズで楽しく覚えよう！　｜　㈱小俣組 グリーンファイル作成・提出ガイド準拠</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="mainCard">
 
     <!-- Start Screen -->
     <div id="startScreen" class="start-screen">
@@ -555,8 +568,10 @@
       <button class="level-btn master-btn" data-level="master">
         <div class="master-shine"></div>
         <div class="master-inner">
-          <div class="emoji">👑✨</div>
-          <div class="name">マスター</div>
+          <div class="emoji-row">
+            <div class="emoji">👑✨</div>
+            <div class="name">マスター</div>
+          </div>
           <div class="desc">全28問 コンプリートチャレンジ！ガイドを完全制覇せよ<br>👀 全問正解で特別演出！？</div>
         </div>
       </button>
@@ -832,6 +847,7 @@ let state = {
 const startScreen = document.getElementById("startScreen");
 const quizScreen = document.getElementById("quizScreen");
 const resultScreen = document.getElementById("resultScreen");
+const mainCard = document.getElementById("mainCard");
 
 /* ===================== 控えめなクラッカー演出 ===================== */
 function burstConfetti(x, y) {
@@ -1081,6 +1097,9 @@ function renderQuestion() {
 
   document.getElementById("feedbackArea").classList.remove("show", "correct-fb", "wrong-fb");
   document.getElementById("nextBtn").classList.remove("show");
+
+  // 新しい問題表示時は画面上部（カード先頭）が見えるようにスクロール
+  window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
 }
 
 function selectAnswer(i, e) {
@@ -1122,7 +1141,21 @@ function selectAnswer(i, e) {
   });
 
   document.getElementById("scorePill").textContent = `${state.score} pt`;
-  document.getElementById("nextBtn").classList.add("show");
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.classList.add("show");
+
+  // 選択肢クリック後、フィードバックと「次の問題へ」ボタンが見える位置まで
+  // 自動スクロール（次へボタンを画面の下端付近に置く）
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      const btnRect = nextBtn.getBoundingClientRect();
+      const targetScrollY = window.scrollY + btnRect.bottom - window.innerHeight + 24;
+      window.scrollTo({
+        top: Math.max(targetScrollY, 0),
+        behavior: "smooth",
+      });
+    }, 80);
+  });
 }
 
 document.getElementById("nextBtn").addEventListener("click", e => {
@@ -1139,6 +1172,7 @@ document.getElementById("nextBtn").addEventListener("click", e => {
 function showResult() {
   quizScreen.style.display = "none";
   resultScreen.classList.add("show");
+  window.scrollTo({ top: 0, behavior: "auto" });
 
   const total = state.questions.length;
   const ratio = state.score / total;
